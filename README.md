@@ -3,20 +3,20 @@
 
 Éléménts à renseigner pour la soutenance :
 
-- [ ] Nom du projet :
+- [ ] Nom du projet : Emminent
 - [ ] URL de la landing page :
 - [ ] URL de l'application finale :
 - [ ] URL de connexion au back office :
 - [ ] Identifiant de connexion au backoffice :
 - [ ] Mot de passe de connexion au backoffice :
-- [ ] URL de la maquette FIGMA :
+- [ ] URL de la maquette FIGMA : https://www.figma.com/design/0EB9sVPUTnN9kRxdsWfxMq/Landing-page_guide-de-style_maquette-application-groupe11?node-id=171-182&t=u3xafXmCiDOUo9wy-1 
 - [ ] Description du projet :
 
 ## 🚀 Équipe
 
 | Étudiants    | Prénom NOM  |
 | :----------- | :---------- |
-| Étudiant 1   | à compléter |
-| Étudiant 2   | à compléter |
-| Étudiant 3   | à compléter |
+| Étudiant 1   | Noah ROGNON |
+| Étudiant 2   | Ethan TOUITOU|
+| Étudiant 3   | Nathan BATISTA BALANCHE |
 | (Étudiant 4) | à compléter |
