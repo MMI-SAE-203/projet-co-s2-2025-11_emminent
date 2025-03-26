@@ -1,0 +1,103 @@
+---
+import Logo from "../assets/icons/Logo.svg";
+import Logomobile from "../assets/icons/LogoMobile.svg";
+const currentPath = Astro.url.pathname;
+import Utilisateur from "../assets/icons/Utilisateurs.svg";
+---
+
+<header
+    class="flex items-center justify-between px-4 gap-8 border-b-2 border-b-gray-200 h-20 bg-[#52289D]"
+>
+    <a href="/" class="block lg:hidden">
+        <Logomobile class="w-full h-full" />
+    </a>
+    <a href="/" class="hidden lg:block">
+        <Logo class="w-full h-14" />
+    </a>
+
+    <!-- Bouton menu mobile -->
+    <button
+        id="menu-btn"
+        class="group relative z-10 flex h-3 w-6 flex-col justify-between lg:hidden *:block *:ease *:h-0.5 *:w-full *:transform *:rounded-full *:bg-black *:transition *:duration-300"
+        aria-label="Menu"
+        aria-controls="menu"
+        aria-expanded="false"
+    >
+        <span
+            class="group-aria-expanded:translate-y-[5px] group-aria-expanded:rotate-45 !bg-white"
+        ></span>
+        <span
+            class="group-aria-expanded:-translate-y-[5px] group-aria-expanded:-rotate-45 !bg-white"
+        ></span>
+    </button>
+
+    <!-- Menu desktop -->
+    <nav
+        class="hidden lg:flex items-center space-x-8 text-lg text-white font-medium"
+    >
+        <a href="/festival" class="hover:text-[#001733]">Prompts</a>
+        <a href="/films" class="hover:text-[#001733]">Emminent</a>
+        <a href="/activite" class="hover:text-[#001733]"
+            >Outils d'apprentissage</a
+        >
+        <a href="/activite" class="hover:text-[#001733]"
+            >Collaboration et Projets</a
+        >
+        <a href="/activite" class="hover:text-[#001733]">Contact</a>
+        <a href="/activite" class="hover:text-[#001733]">Equipe</a>
+        <a href="/contact">
+            <Utilisateur class="w-full h-10 mr-2" />
+        </a>
+    </nav>
+</header>
+
+<nav
+    id="menu"
+    class="flex-1 px-6 py-12 flex justify-between mt-20 flex-col fixed z-10 inset-0 bg-[#001733] visible opacity-100 max-lg:aria-hidden:invisible max-lg:aria-hidden:opacity-0 lg:mt-0 lg:flex-row lg:static lg:bg-transparent lg:py-6 lg:visible lg:opacity-100 hidden"
+    aria-hidden="true"
+>
+    <ul
+        class="flex flex-col gap-12 text-2xl text-white font-medium text-center"
+    >
+        <li><a href="/festival" class="mb-4">Prompts</a></li>
+        <li><a href="/films" class="mb-4">Emminent</a></li>
+        <li><a href="/activite" class="mb-4">Outils d'apprentissage</a></li>
+        <li>
+            <a href="/infos-pratiques" class="mb-4">Collaboration et Projets</a>
+        </li>
+        <li><a href="/invite" class="mb-4">Contact</a></li>
+        <li>
+            <a
+                href="/contact"
+                class=" ml-6 px-6 py-2 bg-white border border-black  rounded-full text-black font-semibold hover:bg-black hover:text-white transition"
+                >Connexion</a
+            >
+        </li>
+    </ul>
+</nav>
+
+<script>
+    const toggle = document.querySelector("#menu-btn");
+    const nav = document.querySelector("#menu");
+    const closeBtn = document.querySelector("#close-btn");
+    const page = document.body;
+
+    if (toggle && nav) {
+        toggle.addEventListener("click", () => {
+            const isOpen = toggle.ariaExpanded === "true";
+            const isClosed = !isOpen;
+
+            toggle.ariaExpanded = String(isClosed);
+            nav.ariaHidden = String(isOpen);
+            page.classList.toggle("noscroll", isClosed);
+
+            nav.classList.toggle("hidden");
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            nav.classList.add("hidden");
+        });
+    }
+</script>
