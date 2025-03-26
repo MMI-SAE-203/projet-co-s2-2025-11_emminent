@@ -1,0 +1,50 @@
+---
+const teamMembers = [
+    {
+        name: "Ethan Touitou",
+        role: "Étudiant au BUT MMI de Montbéliard",
+        email: "ethan.touitou@edu.univ-fcomte.fr",
+        img: "../../src/assets/img/ethan.webp",
+    },
+    {
+        name: "Nathan Batista-Balanche",
+        role: "Étudiant au BUT MMI de Montbéliard",
+        email: "nathan.batista_balanche@edu.univ-fcomte.fr",
+        img: "../../src/assets/img/nathan.webp",
+    },
+    {
+        name: "Noah Rognon",
+        role: "Étudiant au BUT MMI de Montbéliard",
+        email: "noah.rognon@edu.univ-fcomte.fr",
+        img: "../../src/assets/img/noah.webp",
+    },
+];
+---
+
+<section class=" text-white py-10 px-6">
+    <h2 class="text-center text-3xl font-semibold mb-8">
+        Présentation de l'équipe
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {
+            teamMembers.map((member) => (
+                <div class="bg-[#121b3c] rounded-2xl shadow-lg overflow-hidden border-2 border-purple-500 hover:border-purple-400 transition hover:scale-105 duration-300">
+                    <img
+                        src={member.img}
+                        alt={member.name}
+                        class="w-full h-60 object-cover"
+                        loading="lazy"
+                    />
+                    <div class="p-5 text-center">
+                        <h3 class="text-xl font-bold text-purple-400">
+                            {member.name}
+                        </h3>
+                        <p class="text-sm text-gray-300">{member.role}</p>
+                        <p class="text-xs mt-2 text-gray-400">{member.email}</p>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>

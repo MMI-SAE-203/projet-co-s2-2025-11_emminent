@@ -1,12 +1,16 @@
 ---
 import Logo from "../assets/icons/Logo.svg";
+import Logomobile from "../assets/icons/Logomobile.svg";
 const currentPath = Astro.url.pathname;
 ---
 
 <header
     class="flex items-center justify-between px-4 gap-8 border-b-2 border-b-gray-200 h-20 bg-[#52289D]"
 >
-    <a href="/">
+    <a href="/" class="block lg:hidden">
+        <Logomobile class="w-full h-full" />
+    </a>
+    <a href="/" class="hidden lg:block">
         <Logo class="w-full h-14" />
     </a>
 
@@ -19,10 +23,10 @@ const currentPath = Astro.url.pathname;
         aria-expanded="false"
     >
         <span
-            class="group-aria-expanded:translate-y-[5px] group-aria-expanded:rotate-45 bg-black"
+            class="group-aria-expanded:translate-y-[5px] group-aria-expanded:rotate-45 !bg-white"
         ></span>
         <span
-            class="group-aria-expanded:-translate-y-[5px] group-aria-expanded:-rotate-45 bg-black"
+            class="group-aria-expanded:-translate-y-[5px] group-aria-expanded:-rotate-45 !bg-white"
         ></span>
     </button>
 

@@ -1,0 +1,245 @@
+---
+import Layout from "../../layouts/Layoutlanding.astro";
+import Button from "../../components/Button.astro";
+import FAQ from "../../components/FAQ.astro";
+import Note from "../../assets/icons/contacter.svg";
+import Team from "../../components/Team.astro";	
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+	<h1 class="mt-12">
+		Emminent – L’IA qui transforme <br />l’apprentissage en MMI
+	</h1>
+	<h2>Un assistant intelligent conçu pour vous, par vous</h2>
+	<p class="max-w-screen-md text-left">
+		Emminent, c’est bien plus qu’un simple assistant. Il comprend les cours
+		MMI, aide étudiants et enseignants, et réinvente l’apprentissage au
+		quotidien. Formé à partir des travaux des étudiants, des enseignants et
+		de l’administration, il s’adapte aux besoins réels du département MMI.
+	</p>
+	<div class="ml-10 max-w-md text-white rounded-lg">
+		<ul class="space-y-2">
+			<li class="flex gap-2">
+				<span class="text-xl">➤</span>
+				<span
+					>Un assistant formé sur les ressources du département MMI.</span
+				>
+			</li>
+			<li class="flex items-center gap-2">
+				<span class="text-xl">➤</span>
+				<span
+					>Une IA qui évolue grâce à votre utilisation et vos retours.</span
+				>
+			</li>
+			<li class="flex items-center gap-2">
+				<span class="text-xl">➤</span>
+				<span
+					>Un outil collaboratif pensé pour booster votre réussite.</span
+				>
+			</li>
+		</ul>
+	</div>
+	<Button className="ml-42" link="/appli" text="Découvrir" />
+	<img
+		src="../../src/assets/img/phone.gif"
+		alt="Animation du téléphone"
+		class="absolute right-20 bottom-40 w-[500px] md:w-[600px] xl:w-[700px] pointer-events-none"
+	/>
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<!-- Image animée (GIF) du laptop -->
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Animation du laptop"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+
+		<!-- Texte de droite -->
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl">🖥️</span>
+				Un assistant toujours disponible
+			</h2>
+
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Chatbot d’assistance intelligent</strong><br />
+					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
+				</p>
+				<p>
+					<strong>Reconnaissance vocale et prise de notes</strong><br
+					/>
+					– Transcription automatique des cours en notes claires et exploitables.
+				</p>
+				<p>
+					<strong>Générateur de fiches de révision</strong><br />
+					– Création automatique de fiches synthétiques adaptées à votre
+					niveau.
+				</p>
+			</div>
+		</div>
+	</section>
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<!-- Texte de gauche -->
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl">🖥️</span>
+				Un assistant toujours disponible
+			</h2>
+
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Chatbot d’assistance intelligent</strong><br />
+					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
+				</p>
+				<p>
+					<strong>Reconnaissance vocale et prise de notes</strong><br
+					/>
+					– Transcription automatique des cours en notes claires et exploitables.
+				</p>
+				<p>
+					<strong>Générateur de fiches de révision</strong><br />
+					– Création automatique de fiches synthétiques adaptées à votre
+					niveau.
+				</p>
+			</div>
+		</div>
+
+		<!-- Image animée (GIF) du laptop -->
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Animation du laptop"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+	</section>
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<!-- Image animée (GIF) du laptop -->
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Animation du laptop"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+
+		<!-- Texte de droite -->
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl">🖥️</span>
+				Un assistant toujours disponible
+			</h2>
+
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Chatbot d’assistance intelligent</strong><br />
+					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
+				</p>
+				<p>
+					<strong>Reconnaissance vocale et prise de notes</strong><br
+					/>
+					– Transcription automatique des cours en notes claires et exploitables.
+				</p>
+				<p>
+					<strong>Générateur de fiches de révision</strong><br />
+					– Création automatique de fiches synthétiques adaptées à votre
+					niveau.
+				</p>
+			</div>
+		</div>
+	</section>
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<!-- Texte de gauche -->
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl">🖥️</span>
+				Un assistant toujours disponible
+			</h2>
+
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Chatbot d’assistance intelligent</strong><br />
+					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
+				</p>
+				<p>
+					<strong>Reconnaissance vocale et prise de notes</strong><br
+					/>
+					– Transcription automatique des cours en notes claires et exploitables.
+				</p>
+				<p>
+					<strong>Générateur de fiches de révision</strong><br />
+					– Création automatique de fiches synthétiques adaptées à votre
+					niveau.
+				</p>
+			</div>
+		</div>
+
+		<!-- Image animée (GIF) du laptop -->
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Animation du laptop"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+	</section>
+	<h2>Des outils puissants pour aller plus loin</h2>
+	<p>
+		Générateur d’idées de projets – Suggestions d’idées innovantes basées
+		sur vos intérêts et tendances actuelles.<br /> Simulations d’examens en conditions
+		réelles – Sessions d’entraînement interactives basées sur les formats MMI.<br
+		/>Analyse automatique des feedbacks de projets – Suggestions
+		d’amélioration personnalisées à partir des retours des enseignants. <br
+		/>Mode "focus" et gestion du temps – Un Pomodoro intelligent pour éviter
+		la procrastination.<br /> Plugin raccourci – Accédez à Emminent en un clic
+		depuis votre navigateur.
+	</p>
+	<h1 class="text-center">Rejoignez la communauté Emminent dès maintenant</h1>
+	<p class="font-bold text-[24px] text-center">
+		Ne perdez plus de temps, boostez votre apprentissage en MMI avec
+		Emminent.
+	</p>
+	<Button className="mx-auto" link="/appli" text="Découvrir" />
+	
+		<section
+			class="text-white py-6 flex flex-col md:flex-row justify-between max-w-6xl mx-auto"
+		>
+			<!-- Texte avec icône -->
+			<div class="flex items-center space-x-3">
+				<Note />
+				<p class="text-lg font-light">
+					Une autre question ? <br class="md:hidden" /> Contactez-nous
+					directement !
+				</p>
+			</div>
+
+			<!-- Bouton -->
+			<Button
+				className="    md:mt-0 "
+				link="/contact"
+				text="Contactez-nous"
+			/>
+		</section>
+		<Team/>
+</Layout>
