@@ -4,230 +4,274 @@ import Button from "../components/Button.astro";
 import FAQ from "../components/FAQ.astro";
 import Note from "../assets/icons/contacter.svg";
 import Team from "../components/Team.astro";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<h1 class="mt-12">
-		Emminent – L’IA spécialisée pour réussir <br />en MMI
+	<section
+		class="relative flex flex-col-reverse md:flex-row items-center justify-between gap-8 px-6 py-12"
+	>
+		<div class="md:w-1/2">
+			<h1 class="text-3xl md:text-5xl font-bold">
+				Emminent – L’IA spécialisée pour réussir <br />en MMI
+			</h1>
+			<h2 class="text-xl md:text-2xl mt-4">
+				Un assistant intelligent dédié aux 4 piliers MMI
+			</h2>
+			<p class="max-w-screen-md mt-4 text-left">
+				Conçue pour les étudiants en BUT MMI, Emminent est la seule IA
+				qui comprend vraiment votre formation. Du code au design, en
+				passant par la communication et la rédaction, elle vous
+				accompagne dans tous vos projets et révisions.
+			</p>
+			<div class="mt-6 max-w-md text-white rounded-lg">
+				<ul class="space-y-2">
+					<li class="flex gap-2">
+						<span class="text-xl">➤</span>
+						<span>Une IA formée sur le programme officiel MMI.</span
+						>
+					</li>
+					<li class="flex items-center gap-2">
+						<span class="text-xl">➤</span>
+						<span
+							>Spécialisée en code, design, communication et
+							rédaction de dossier.</span
+						>
+					</li>
+					<li class="flex items-center gap-2">
+						<span class="text-xl">➤</span>
+						<span
+							>Un outil évolutif qui s’adapte à vos besoins et vos
+							retours.</span
+						>
+					</li>
+				</ul>
+			</div>
+			<Button className="mt-6" link="/appli" text="Découvrir" />
+		</div>
+
+		<!-- IMAGE PHONE CENTRÉE ET AJUSTÉE -->
+		<div class="md:w-1/2 flex justify-center md:justify-center">
+			<img
+				src="../../src/assets/img/phone.webp"
+				alt="Animation du téléphone"
+				class="w-44 sm:w-56 md:w-64 lg:w-72 xl:w-80"
+			/>
+		</div>
+	</section>
+
+	<!-- Section Code -->
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Code MMI"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl"></span>Apprenez à coder plus vite et
+				mieux
+			</h2>
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Aide au développement</strong><br />– Explications
+					claires sur HTML, CSS, JS, SQL, API et plus.
+				</p>
+				<p>
+					<strong>Correction & débogage</strong><br />– Suggestions
+					intelligentes et commentaires.
+				</p>
+				<p>
+					<strong>Templates MMI</strong><br />– Génération de
+					structures prêtes à l’emploi pour vos projets.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Section Design -->
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl"></span>Boostez votre créativité graphique
+			</h2>
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Fiches UI/UX</strong><br />– Révisions interactives
+					sur l’ergonomie, la couleur, la typo.
+				</p>
+				<p>
+					<strong>Glossaire design</strong><br />– Définitions et
+					exemples concrets.
+				</p>
+				<p>
+					<strong>Briefs automatiques</strong><br />– Aide à la
+					conception de maquettes et moodboards.
+				</p>
+			</div>
+		</div>
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Design MMI"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none translate-x-[-40px]"
+			/>
+		</div>
+	</section>
+
+	<!-- Section Communication -->
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Com MMI"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
+			/>
+		</div>
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl"></span>Maîtrisez la stratégie de com’ MMI
+			</h2>
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Révisions ciblées</strong><br />– SWOT, message,
+					cible, canal.
+				</p>
+				<p>
+					<strong>Quiz de com’</strong><br />– Branding, pub, réseaux
+					sociaux.
+				</p>
+				<p>
+					<strong>Exercices pratiques</strong><br />– Analyse de
+					visuels, storytelling et contenu.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Section Rédaction -->
+	<section
+		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
+	>
+		<div class="max-w-lg">
+			<h2
+				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
+			>
+				<span class="text-4xl"></span>Rédigez mieux, plus vite, plus
+				clair
+			</h2>
+			<div class="mt-4 space-y-4 text-lg">
+				<p>
+					<strong>Structuration automatique</strong><br />– Plans
+					adaptés pour dossiers et soutenances.
+				</p>
+				<p>
+					<strong>Optimisation du texte</strong><br />– Reformulation,
+					fluidité, clarté.
+				</p>
+				<p>
+					<strong>Conseils personnalisés</strong><br />– L’IA améliore
+					vos parties clés (intro, conclusion...).
+				</p>
+			</div>
+		</div>
+		<div class="relative">
+			<img
+				src="../../../src/assets/img/laptop.webp"
+				alt="Rédaction MMI"
+				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none translate-x-[-40px]"
+			/>
+		</div>
+	</section>
+
+	<!-- Section IA Spéciale -->
+	<section class="px-8 py-12 text-white">
+		<div class="max-w-6xl mx-auto">
+			<h2 class="text-3xl font-bold mb-8 text-center">
+				Une IA pas comme les autres
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+				<ul
+					class="space-y-2 list-disc p-6 bg-gray-800 border-l-4 border-blue-500 rounded-lg text-lg"
+				>
+					<li>
+						Spécialisée MMI : Elle connaît ton programme, ton
+						rythme, tes échéances
+					</li>
+					<li>
+						Multi-outils : fiches auto-générées, quiz,
+						planificateur, dashboard de progression
+					</li>
+					<li>
+						100 % adaptée à la réalité des cours MMI (et non une IA
+						générique comme ChatGPT)
+					</li>
+				</ul>
+				<ul
+					class="space-y-2 list-disc p-6 bg-gray-800 border-l-4 border-blue-500 rounded-lg text-lg"
+				>
+					<li>
+						Révision express : 5 minutes pour retenir l’essentiel
+					</li>
+					<li>Planificateur de révisions intelligent</li>
+					<li>Suivi de progression par matière</li>
+					<li>
+						Glossaire interactif MMI : tous les termes du BUT
+						expliqués
+					</li>
+					<li>
+						Générateur de projets MMI (sites, pitchs, visuels, etc.)
+					</li>
+				</ul>
+			</div>
+			<h2 class="text-3xl font-bold mt-12 mb-6 text-center">
+				Une communauté, un outil, un objectif : votre réussite
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+				<ul
+					class="space-y-2 list-disc p-6 bg-gray-800 border-l-4 border-blue-500 rounded-lg text-lg"
+				>
+					<li>Licence annuelle par département</li>
+					<li>Accessible sur navigateur, rien à installer</li>
+				</ul>
+				<ul
+					class="space-y-2 list-disc p-6 bg-gray-800 border-l-4 border-blue-500 rounded-lg text-lg"
+				>
+					<li>Données sécurisées et respect du RGPD</li>
+					<li>
+						Version gratuite disponible avec les fonctionnalités de
+						base
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<h1 class="text-center">
+		Vous cherchez une IA qui comprend MMI ? Vous venez de la trouver.
 	</h1>
-	<h2>Un assistant intelligent dédié aux 4 piliers MMI</h2>
-	<p class="max-w-screen-md text-left">
-		Conçue pour les étudiants en BUT MMI, Emminent est la seule IA qui
-		comprend vraiment votre formation. Du code au design, en passant par la
-		communication et la rédaction, elle vous accompagne dans tous vos
-		projets et révisions.
-	</p>
-	<div class="ml-10 max-w-md text-white rounded-lg">
-		<ul class="space-y-2">
-			<li class="flex gap-2">
-				<span class="text-xl">➤</span>
-				<span>Une IA formée sur le programme officiel MMI.</span>
-			</li>
-			<li class="flex items-center gap-2">
-				<span class="text-xl">➤</span>
-				<span
-					>Spécialisée en code, design, communication et rédaction de
-					dossier.</span
-				>
-			</li>
-			<li class="flex items-center gap-2">
-				<span class="text-xl">➤</span>
-				<span
-					>Un outil évolutif qui s’adapte à vos besoins et vos
-					retours.</span
-				>
-			</li>
-		</ul>
-	</div>
-	<Button className="ml-42" link="/appli" text="Découvrir" />
-	<img
-		src="../../src/assets/img/phone.webp"
-		alt="Animation du téléphone"
-		class="absolute right-20 bottom-[-50px] w-[170px] md:w-[220px] xl:w-[270px] pointer-events-none"
-	/>
-	
-	<section
-		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
-	>
-		<!-- Image animée (GIF) du laptop -->
-		<div class="relative">
-			<img
-				src="../../../src/assets/img/laptop.webp"
-				alt="Animation du laptop"
-				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
-			/>
-		</div>
-
-		<!-- Texte de droite -->
-		<div class="max-w-lg">
-			<h2
-				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
-			>
-				<span class="text-4xl">🖥️</span>
-				Un assistant toujours disponible
-			</h2>
-
-			<div class="mt-4 space-y-4 text-lg">
-				<p>
-					<strong>Chatbot d’assistance intelligent</strong><br />
-					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
-				</p>
-				<p>
-					<strong>Reconnaissance vocale et prise de notes</strong><br
-					/>
-					– Transcription automatique des cours en notes claires et exploitables.
-				</p>
-				<p>
-					<strong>Générateur de fiches de révision</strong><br />
-					– Création automatique de fiches synthétiques adaptées à votre
-					niveau.
-				</p>
-			</div>
-		</div>
-	</section>
-	<section
-		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
-	>
-		<!-- Texte de gauche -->
-		<div class="max-w-lg">
-			<h2
-				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
-			>
-				<span class="text-4xl">🖥️</span>
-				Un assistant toujours disponible
-			</h2>
-
-			<div class="mt-4 space-y-4 text-lg">
-				<p>
-					<strong>Chatbot d’assistance intelligent</strong><br />
-					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
-				</p>
-				<p>
-					<strong>Reconnaissance vocale et prise de notes</strong><br
-					/>
-					– Transcription automatique des cours en notes claires et exploitables.
-				</p>
-				<p>
-					<strong>Générateur de fiches de révision</strong><br />
-					– Création automatique de fiches synthétiques adaptées à votre
-					niveau.
-				</p>
-			</div>
-		</div>
-
-		<!-- Image animée (GIF) du laptop -->
-		<div class="relative">
-			<img
-				src="../../../src/assets/img/laptop.webp"
-				alt="Animation du laptop"
-				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
-			/>
-		</div>
-	</section>
-	<section
-		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
-	>
-		<!-- Image animée (GIF) du laptop -->
-		<div class="relative">
-			<img
-				src="../../../src/assets/img/laptop.webp"
-				alt="Animation du laptop"
-				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
-			/>
-		</div>
-
-		<!-- Texte de droite -->
-		<div class="max-w-lg">
-			<h2
-				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
-			>
-				<span class="text-4xl">🖥️</span>
-				Un assistant toujours disponible
-			</h2>
-
-			<div class="mt-4 space-y-4 text-lg">
-				<p>
-					<strong>Chatbot d’assistance intelligent</strong><br />
-					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
-				</p>
-				<p>
-					<strong>Reconnaissance vocale et prise de notes</strong><br
-					/>
-					– Transcription automatique des cours en notes claires et exploitables.
-				</p>
-				<p>
-					<strong>Générateur de fiches de révision</strong><br />
-					– Création automatique de fiches synthétiques adaptées à votre
-					niveau.
-				</p>
-			</div>
-		</div>
-	</section>
-	<section
-		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
-	>
-		<!-- Texte de gauche -->
-		<div class="max-w-lg">
-			<h2
-				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
-			>
-				<span class="text-4xl">🖥️</span>
-				Un assistant toujours disponible
-			</h2>
-
-			<div class="mt-4 space-y-4 text-lg">
-				<p>
-					<strong>Chatbot d’assistance intelligent</strong><br />
-					– Réponses instantanées 24/7 sur les cours, projets et deadlines.
-				</p>
-				<p>
-					<strong>Reconnaissance vocale et prise de notes</strong><br
-					/>
-					– Transcription automatique des cours en notes claires et exploitables.
-				</p>
-				<p>
-					<strong>Générateur de fiches de révision</strong><br />
-					– Création automatique de fiches synthétiques adaptées à votre
-					niveau.
-				</p>
-			</div>
-		</div>
-
-		<!-- Image animée (GIF) du laptop -->
-		<div class="relative">
-			<img
-				src="../../../src/assets/img/laptop.webp"
-				alt="Animation du laptop"
-				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
-			/>
-		</div>
-	</section>
-	<h2>Des outils puissants pour aller plus loin</h2>
-	<p>
-		Générateur d’idées de projets – Suggestions d’idées innovantes basées
-		sur vos intérêts et tendances actuelles.<br /> Simulations d’examens en conditions
-		réelles – Sessions d’entraînement interactives basées sur les formats MMI.<br
-		/>Analyse automatique des feedbacks de projets – Suggestions
-		d’amélioration personnalisées à partir des retours des enseignants. <br
-		/>Mode "focus" et gestion du temps – Un Pomodoro intelligent pour éviter
-		la procrastination.<br /> Plugin raccourci – Accédez à Emminent en un clic
-		depuis votre navigateur.
-	</p>
-	<h1 class="text-center">Rejoignez la communauté Emminent dès maintenant</h1>
-	<p class="font-bold text-[24px] text-center">
-		Ne perdez plus de temps, boostez votre apprentissage en MMI avec
-		Emminent.
+	<p class="text-xl mt-8 font-semibold text-center">
+		Rejoignez Emminent et boostez votre apprentissage en code, design, com
+		et rédaction dès aujourd’hui.
 	</p>
 	<Button className="mx-auto" link="/appli" text="Découvrir" />
 	<FAQ />
-
 	<section
 		class="text-white py-6 flex flex-col md:flex-row justify-between max-w-6xl mx-auto"
 	>
-		<!-- Texte avec icône -->
 		<div class="flex items-center space-x-3">
 			<Note />
 			<p class="text-lg font-light">
@@ -235,13 +279,7 @@ import Team from "../components/Team.astro";
 				!
 			</p>
 		</div>
-
-		<!-- Bouton -->
-		<Button
-			className="    md:mt-0 "
-			link="/contact"
-			text="Contactez-nous"
-		/>
+		<Button className="md:mt-0" link="/contact" text="Contactez-nous" />
 	</section>
 	<Team />
 </Layout>

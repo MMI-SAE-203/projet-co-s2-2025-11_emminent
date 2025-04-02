@@ -7,7 +7,7 @@ const teamMembers = [
         img: "../../src/assets/img/ethan.webp",
     },
     {
-        name: "Nathan Batista-Balanche",
+        name: "Nathan Batista",
         role: "Étudiant au BUT MMI de Montbéliard",
         email: "nathan.batista_balanche@edu.univ-fcomte.fr",
         img: "../../src/assets/img/nathan.webp",
@@ -21,27 +21,38 @@ const teamMembers = [
 ];
 ---
 
-<section class=" text-white py-10 px-6">
-    <h2 class="text-center text-3xl font-semibold mb-8">
-        Présentation de l'équipe
+<section
+    class="text-white py-16 px-6 bg-gradient-to-b "
+>
+    <h2
+        class="text-center text-4xl font-extrabold mb-12 text-purple-300 tracking-wide"
+    >
+        L’équipe derrière Emminent
     </h2>
 
-    <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto"
+    >
         {
             teamMembers.map((member) => (
-                <div class="bg-[#121b3c] rounded-2xl shadow-lg overflow-hidden border-2 border-purple-500 hover:border-purple-400 transition hover:scale-105 duration-300">
+                <div class="bg-white/5 backdrop-blur-md border border-purple-600 rounded-xl shadow-md hover:shadow-xl transition hover:scale-105 duration-300 overflow-hidden">
                     <img
                         src={member.img}
                         alt={member.name}
                         class="w-full h-60 object-cover"
                         loading="lazy"
                     />
-                    <div class="p-5 text-center">
-                        <h3 class="text-xl font-bold text-purple-400">
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-purple-400 mb-1 text-center">
                             {member.name}
                         </h3>
                         <p class="text-sm text-gray-300">{member.role}</p>
-                        <p class="text-xs mt-2 text-gray-400">{member.email}</p>
+                        <a
+                            href={`mailto:${member.email}`}
+                            class="block mt-3 text-xs text-purple-300 hover:underline hover:text-purple-200 transition"
+                        >
+                            {member.email}
+                        </a>
                     </div>
                 </div>
             ))
