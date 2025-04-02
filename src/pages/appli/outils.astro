@@ -1,0 +1,141 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+import Button from "../../components/Button.astro";
+import SectionCard from "../../components/cardoutils.astro";
+---
+
+<Layout>
+    <div class="container mx-auto px-6 py-12">
+        <h1 class="text-3xl font-bold text-center">
+            Des outils intelligents pour mieux apprendre
+        </h1>
+        <p class="text-center mt-4">
+            Que vous soyez en pleines révisions d’examens ou que vous souhaitiez
+            simplement mieux organiser votre apprentissage, Emminent vous
+            propose des outils adaptés à votre rythme et vos besoins.
+        </p>
+
+        <div class="text-center mt-6">
+            <Button
+                className="inline-block"
+                link="/festival"
+                text="Tester Emminent"
+            />
+        </div>
+
+        <h2 class="text-2xl font-semibold mt-12">Ia spécialisé pour le dev</h2>
+        <p class="mt-2">
+            Une intelligence artificielle pensée pour les étudiants et
+            enseignants MMI. Ici, pas d’IA qui va trop loin : elle comprend les
+            attentes pédagogiques
+        </p>
+
+        <div class="flex justify-center mt-6">
+            <img
+                src="../../src/assets/img/group38.webp"
+                alt="Aperçu du générateur de fiches"
+                class="rounded-lg shadow-lg max-w-full"
+            />
+        </div>
+
+        <h3 class="text-xl font-semibold mt-8">Fonctionnalités :</h3>
+        <ul class="list-none pl-5 mt-2 space-y-2 text-white">
+            <li>✔ Résolution de code</li>
+            <li>✔ Créations de composants</li>
+            <li>✔ Explique les erreurs</li>
+            <li>✔ Optimisation</li>
+            <li>✔ Guidage pas à pas</li>
+        </ul>
+
+        <div class="text-center mt-6">
+            <Button
+                className="inline-block"
+                link="/festival"
+                text="Créer une fiche"
+            />
+        </div>
+        <SectionCard
+            title="La spécialisée pour la com’"
+            description="Une intelligence artificielle taillée pour les étudiants et enseignants en communication."
+            features={[
+                "Rédaction optimisée (Persona, Swot, KPI ...)",
+                "Analyse de ton",
+                "Stratégie digitale",
+                "Création de visuels",
+                "Optimisation SEO",
+            ]}
+            buttonText="Com’ avec Emminent"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Ia spécialisé pour le design"
+            description="Une intelligence artificielle pensée pour aider les étudiants et enseignants en design."
+            features={[
+                "Guidelines et tendances",
+                "Harmonie visuelle",
+                "Identité visuelle",
+                "Optimisation UX/UI",
+                "Prototypage assist",
+            ]}
+            buttonText="Designer avec Emminent"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Rédaction de dossier"
+            description="Une IA conçue pour accompagner la rédaction des dossiers MMI, en veillant à respecter les exigences académiques et professionnelles."
+            features={[
+                "Plan structuré",
+                "Rédaction claire et consice",
+                "Cohérence et argumentation",
+                "Correction",
+                "Veille et sources",
+            ]}
+            buttonText="Designer avec Emminent"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Planificateur de révisions"
+            description="Planifiez vos sessions de révisions pour ne plus rien oublier."
+            features={[
+                "Création d’un emploi du temps personnalisé",
+                "Rappels automatiques",
+                "Suggestions d’optimisation du planning",
+            ]}
+            buttonText="Planifier mes révisions"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Mode révision express"
+            description="Révisez efficacement en un minimum de temps."
+            features={[
+                "Séances courtes et ciblées",
+                "Focus sur les points clés",
+                "Techniques de mémorisation rapide",
+            ]}
+            buttonText="Lancer une session express"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Situations d’examen"
+            description="Entraînez-vous comme si vous étiez en épreuve réelle."
+            features={[
+                "Simulation d’examens types",
+                "Gestion du temps et conditions réelles",
+                "Correction détaillée et feedback instantané",
+            ]}
+            buttonText="S’entraîner maintenant"
+            buttonLink="#"
+        />
+        <SectionCard
+            title="Quiz adaptatifs"
+            description="Testez vos connaissances avec des quiz qui s’adaptent à votre niveau."
+            features={[
+                "Questions évolutives basées sur vos résultats",
+                "Corrections et explications détaillées",
+                "Suivi de votre progression",
+            ]}
+            buttonText="Commencer un quiz"
+            buttonLink="#"
+        />
+    </div>
+</Layout>

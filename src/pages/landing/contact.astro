@@ -8,7 +8,7 @@ import Layout from "../../layouts/Layoutlanding.astro";
 <Layout>
     <!-- Bandeau violet sur toute la page -->
     <!-- Bandeau violet plus petit -->
-    <div class="w-full bg-[#52289D]   text-white">
+    <div class="w-full bg-[#52289D] text-white">
         <div
             class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto text-sm"
         >
@@ -54,20 +54,30 @@ import Layout from "../../layouts/Layoutlanding.astro";
                 Nous sommes là pour vous répondre !
             </h2>
 
-            <form class="space-y-4">
+            <form
+                action="https://formspree.io/f/xnnpgjyq"
+                method="POST"
+                class="space-y-4"
+            >
                 <input
                     type="text"
+                    name="nom"
                     placeholder="Nom"
+                    required
                     class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-full focus:outline-none"
                 />
                 <input
                     type="email"
+                    name="email"
                     placeholder="E-mail"
+                    required
                     class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-full focus:outline-none"
                 />
                 <textarea
+                    name="message"
                     placeholder="Message"
                     rows="5"
+                    required
                     class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-2xl resize-none focus:outline-none"
                 ></textarea>
                 <button
