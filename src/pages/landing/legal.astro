@@ -1,55 +1,144 @@
 ---
-import Layout from '../../layouts/Layoutlanding.astro';
+import Layout from "../../layouts/Layoutlanding.astro";
 ---
 
 <Layout>
-   <h1 class="mt-20 ml-20 text-5xl text-white">Informations légales</h1>
-   <section class="legal-info mt-10 ml-27 mb-20 text-2xl text-white">
-      <p>Mentions Légales et Politique de Confidentialité - Emminent</p>
-      <div class="mt-6">
-         <ul>1. Mentions Légales <br>Editeur du site :</ul>
-         <li class="ml-5">Nom du projet : Emminent</li>
-         <li class="ml-5">Responsable de la publication : Noah ROGNON, Ethan TOUITOU, Nathan BATISTA BALANCHE</li>
-         <li class="ml-5">Statut juridique : Entreprise individuelle</li>
-         <li class="ml-5">Numéro d'immatriculation : [Numéro RCS ou RM si applicable]</li>
-         <li class="ml-5">Numéro de TVA : [Numéro de TVA si applicable]</li>
-         <li class="ml-5">Contact : emminent.contact@gmail.com</li>
-         <li class="ml-5">Adresse : 4 place Lucien Tharradin, 25200 Montbéliard</li>
-         <p>Hébergeur :</p>
-         <li class="ml-5">Nom de l'hebergeur : Infomaniak</li>
-         <li class="ml-5">Adresse : Rue Eugène-Marziano 25, 1227 Genève, Suisse</li>
-         <li class="ml-5">Contact : +41 22 820 35 40</li>
+   <section class="max-w-5xl mx-auto px-6 mt-24 mb-20 text-white">
+      <h1 class="text-5xl font-bold mb-10">Informations légales</h1>
+
+      <!-- Bloc 1 : Mentions légales -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            1. Mentions Légales
+         </h2>
+         <p class="text-lg mb-4">Éditeur du site :</p>
+         <ul class="space-y-2 text-base ml-4 list-disc marker:text-violet-400">
+            <li><strong>Nom du projet :</strong> Emminent</li>
+            <li>
+               <strong>Responsables de la publication :</strong> Noah ROGNON, Ethan
+               TOUITOU, Nathan BATISTA BALANCHE
+            </li>
+            <li><strong>Statut juridique :</strong> Entreprise individuelle</li>
+            <li>
+               <strong>Numéro d'immatriculation :</strong> [Numéro RCS ou RM si applicable]
+            </li>
+            <li>
+               <strong>Numéro de TVA :</strong> [Numéro de TVA si applicable]
+            </li>
+            <li><strong>Contact :</strong> emminent.contact@gmail.com</li>
+            <li>
+               <strong>Adresse :</strong> 4 place Lucien Tharradin, 25200 Montbéliard
+            </li>
+         </ul>
+
+         <p class="text-lg mt-6 mb-2">Hébergeur :</p>
+         <ul class="space-y-2 text-base ml-4 list-disc marker:text-violet-400">
+            <li><strong>Nom :</strong> Infomaniak</li>
+            <li>
+               <strong>Adresse :</strong> Rue Eugène-Marziano 25, 1227 Genève, Suisse
+            </li>
+            <li><strong>Contact :</strong> +41 22 820 35 40</li>
+         </ul>
       </div>
-      <div class="mt-6">
-         <ul>2. Collecte et Protection des Données Personelles<br>Emminent collecte certaines données afin d’améliorer l’expérience utilisateur, notamment :</ul>
-         <li class="ml-5">Informations de compte (nom, email, préférences d’apprentissage).</li>
-         <li class="ml-5">Historique des interactions avec l'IA et progression d'apprentissage.</li>
-         <p>Les données sont stockées de manière sécurisée et ne sont pas partagées avec des tiers sans consentement explicite.</p>
+
+      <!-- Bloc 2 : Données personnelles -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            2. Collecte et Protection des Données Personnelles
+         </h2>
+         <p class="text-lg mb-4">
+            Emminent collecte certaines données afin d’améliorer l’expérience
+            utilisateur, notamment :
+         </p>
+         <ul class="space-y-2 text-base ml-4 list-disc marker:text-violet-400">
+            <li>
+               Informations de compte (nom, email, préférences d’apprentissage)
+            </li>
+            <li>
+               Historique des interactions avec l'IA et progression
+               d'apprentissage
+            </li>
+         </ul>
+         <p class="mt-4">
+            Les données sont stockées de manière sécurisée et ne sont pas
+            partagées avec des tiers sans consentement explicite.
+         </p>
       </div>
-      <div class="mt-6">
-         <p>3. Droits des utilisateurs : Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants sur vos données personnelles :</p>
-         <li class="ml-5">Droit d'accès, de rectification et de suppression des données.</li>
-         <li class="ml-5">Droit à la limitation du traitement des données.</li>
-         <li class="ml-5">Droit à la portabilité des données.</li>
-         <li class="ml-5">Droit d'opposition à l'utilisation des données.</li>
-         <p>Pour exercer ces droits, veuillez nous contacter à emminent.contact@gmail.com.</p>
-         <p>Durée de conservation des données : Les données personnelles collectées sont conservées pour une durée maximale de [Durée de conservation] après la dernière interaction avec le service.</p>
+
+      <!-- Bloc 3 : Droits utilisateurs -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            3. Droits des utilisateurs
+         </h2>
+         <p class="mb-4">
+            Conformément au RGPD, vous disposez des droits suivants sur vos
+            données personnelles :
+         </p>
+         <ul class="space-y-2 text-base ml-4 list-disc marker:text-violet-400">
+            <li>
+               Droit d'accès, de rectification et de suppression des données
+            </li>
+            <li>Droit à la limitation du traitement des données</li>
+            <li>Droit à la portabilité des données</li>
+            <li>Droit d'opposition à l'utilisation des données</li>
+         </ul>
+         <p class="mt-4">
+            Pour exercer ces droits, veuillez nous contacter à <a
+               href="mailto:emminent.contact@gmail.com"
+               class="text-violet-300 underline">emminent.contact@gmail.com</a>
+         </p>
+         <p class="mt-2">
+            Durée de conservation des données : [Durée de conservation] après la
+            dernière interaction avec le service.
+         </p>
       </div>
-      <div class="mt-6">
-         <p>4. Propriété Intellectuelle</p>
-         <p>Tout le contenu du site (textes, images, algorithmes, etc.) est protégé par le droit de la propriété intellectuelle et ne peut être utilisé sans autorisation.</p>
+
+      <!-- Bloc 4 : Propriété intellectuelle -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            4. Propriété Intellectuelle
+         </h2>
+         <p>
+            Tout le contenu du site (textes, images, algorithmes, etc.) est
+            protégé par le droit de la propriété intellectuelle et ne peut être
+            utilisé sans autorisation.
+         </p>
       </div>
-      <div class="mt-6">
-         <p>5. Responsabilité et Limitation</p>
-         <p>Emminent est un outil d’aide à l'apprentissage et ne remplace pas les enseignants ou les cours officiels. Les utilisateurs restent responsables de l’usage des informations fournies.</p>
+
+      <!-- Bloc 5 : Responsabilité -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            5. Responsabilité et Limitation
+         </h2>
+         <p>
+            Emminent est un outil d’aide à l'apprentissage et ne remplace pas
+            les enseignants ou les cours officiels. Les utilisateurs restent
+            responsables de l’usage des informations fournies.
+         </p>
       </div>
-      <div class="mt-6">
-         <p>6. Règlement des Litiges</p>
-         <p>En cas de litige, une résolution à l’amiable sera privilégiée. À défaut, le tribunal compétent sera [Nom du tribunal].</p>
+
+      <!-- Bloc 6 : Litiges -->
+      <div class="mb-12">
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            6. Règlement des Litiges
+         </h2>
+         <p>
+            En cas de litige, une résolution à l’amiable sera privilégiée. À
+            défaut, le tribunal compétent sera [Nom du tribunal].
+         </p>
       </div>
-      <div class="mt-6">
-         <p>7. Contact</p>
-         <p>Pour toute question sur la protection des données ou les mentions légales, vous pouvez nous contacter à : <a href="mailto:emminent.contact@gmail.com">emminent.contact@gmail.com</a></p>
+
+      <!-- Bloc 7 : Contact -->
+      <div>
+         <h2 class="text-3xl font-semibold mb-4 border-b border-white/10 pb-2">
+            7. Contact
+         </h2>
+         <p>
+            Pour toute question sur la protection des données ou les mentions
+            légales, vous pouvez nous contacter à : <a
+               href="mailto:emminent.contact@gmail.com"
+               class="text-violet-300 underline">emminent.contact@gmail.com</a>
+         </p>
       </div>
    </section>
 </Layout>

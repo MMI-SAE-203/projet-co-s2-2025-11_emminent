@@ -1,9 +1,9 @@
 ---
-import Layout from "../../layouts/Layoutlanding.astro";
-import Button from "../../components/Button.astro";
-import FAQ from "../../components/FAQ.astro";
-import Note from "../../assets/icons/contacter.svg";
-import Team from "../../components/Team.astro";	
+import Layout from "../layouts/Layoutlanding.astro";
+import Button from "../components/Button.astro";
+import FAQ from "../components/FAQ.astro";
+import Note from "../assets/icons/contacter.svg";
+import Team from "../components/Team.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -11,43 +11,44 @@ import Team from "../../components/Team.astro";
 
 <Layout>
 	<h1 class="mt-12">
-		Emminent – L’IA qui transforme <br />l’apprentissage en MMI
+		Emminent – L’IA spécialisée pour réussir <br />en MMI
 	</h1>
-	<h2>Un assistant intelligent conçu pour vous, par vous</h2>
+	<h2>Un assistant intelligent dédié aux 4 piliers MMI</h2>
 	<p class="max-w-screen-md text-left">
-		Emminent, c’est bien plus qu’un simple assistant. Il comprend les cours
-		MMI, aide étudiants et enseignants, et réinvente l’apprentissage au
-		quotidien. Formé à partir des travaux des étudiants, des enseignants et
-		de l’administration, il s’adapte aux besoins réels du département MMI.
+		Conçue pour les étudiants en BUT MMI, Emminent est la seule IA qui
+		comprend vraiment votre formation. Du code au design, en passant par la
+		communication et la rédaction, elle vous accompagne dans tous vos
+		projets et révisions.
 	</p>
 	<div class="ml-10 max-w-md text-white rounded-lg">
 		<ul class="space-y-2">
 			<li class="flex gap-2">
 				<span class="text-xl">➤</span>
+				<span>Une IA formée sur le programme officiel MMI.</span>
+			</li>
+			<li class="flex items-center gap-2">
+				<span class="text-xl">➤</span>
 				<span
-					>Un assistant formé sur les ressources du département MMI.</span
+					>Spécialisée en code, design, communication et rédaction de
+					dossier.</span
 				>
 			</li>
 			<li class="flex items-center gap-2">
 				<span class="text-xl">➤</span>
 				<span
-					>Une IA qui évolue grâce à votre utilisation et vos retours.</span
-				>
-			</li>
-			<li class="flex items-center gap-2">
-				<span class="text-xl">➤</span>
-				<span
-					>Un outil collaboratif pensé pour booster votre réussite.</span
+					>Un outil évolutif qui s’adapte à vos besoins et vos
+					retours.</span
 				>
 			</li>
 		</ul>
 	</div>
 	<Button className="ml-42" link="/appli" text="Découvrir" />
 	<img
-		src="../../src/assets/img/phone.gif"
+		src="../../src/assets/img/phone.webp"
 		alt="Animation du téléphone"
-		class="absolute right-20 bottom-40 w-[500px] md:w-[600px] xl:w-[700px] pointer-events-none"
+		class="absolute right-20 bottom-[-50px] w-[170px] md:w-[220px] xl:w-[270px] pointer-events-none"
 	/>
+	
 	<section
 		class="relative flex flex-col md:flex-row items-center justify-between gap-8 p-8"
 	>
@@ -221,25 +222,26 @@ import Team from "../../components/Team.astro";
 		Emminent.
 	</p>
 	<Button className="mx-auto" link="/appli" text="Découvrir" />
-	
-		<section
-			class="text-white py-6 flex flex-col md:flex-row justify-between max-w-6xl mx-auto"
-		>
-			<!-- Texte avec icône -->
-			<div class="flex items-center space-x-3">
-				<Note />
-				<p class="text-lg font-light">
-					Une autre question ? <br class="md:hidden" /> Contactez-nous
-					directement !
-				</p>
-			</div>
+	<FAQ />
 
-			<!-- Bouton -->
-			<Button
-				className="    md:mt-0 "
-				link="/contact"
-				text="Contactez-nous"
-			/>
-		</section>
-		<Team/>
+	<section
+		class="text-white py-6 flex flex-col md:flex-row justify-between max-w-6xl mx-auto"
+	>
+		<!-- Texte avec icône -->
+		<div class="flex items-center space-x-3">
+			<Note />
+			<p class="text-lg font-light">
+				Une autre question ? <br class="md:hidden" /> Contactez-nous directement
+				!
+			</p>
+		</div>
+
+		<!-- Bouton -->
+		<Button
+			className="    md:mt-0 "
+			link="/contact"
+			text="Contactez-nous"
+		/>
+	</section>
+	<Team />
 </Layout>

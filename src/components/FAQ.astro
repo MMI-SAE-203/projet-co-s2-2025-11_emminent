@@ -1,28 +1,59 @@
-<section class="max-w-3xl mx-auto p-6 bg-[#0A1A33] text-white rounded-lg shadow-lg" 
-    x-data="{ 
-        openIndex: null, 
-        faqs: [
-            { question: 'Emminent est-il gratuit ?', answer: 'Oui, Emminent propose une version gratuite avec toutes les fonctionnalités proposées de l\'application web.' },
-            { question: 'Comment l\'IA d’Emminent apprend-elle ?', answer: 'L’assistant est entraîné à partir des ressources pédagogiques du département MMI et évolue grâce aux interactions des étudiants et enseignants. Vos retours permettent d’améliorer ses réponses en continu.' },
-            { question: 'Puis-je utiliser Emminent sur mon téléphone ?', answer: 'Oui ! Emminent est accessible depuis un navigateur web et bientôt via une application mobile pour un usage encore plus fluide.' },
-            { question: 'L\'IA peut-elle remplacer un professeur ?', answer: 'Non, Emminent est un outil d’accompagnement et non un substitut. Il aide à mieux comprendre les cours, mais l’échange avec les enseignants reste essentiel.' },
-            { question: 'Comment puis-je contribuer au projet ?', answer: 'Vous pouvez tester l’outil, donner vos retours, proposer des améliorations et même participer à son développement si vous avez des compétences en design ou en développement.' },
-            { question: 'Mes données sont-elles protégées ?', answer: 'Oui ! La confidentialité et la sécurité sont au cœur d’Emminent. Aucune donnée sensible n’est partagée sans votre accord. Nous respectons les réglementations en vigueur.' }
-        ]
-    }">
-    
-    <h2 class="text-2xl font-bold border-b border-white/50 pb-3 mb-4">FAQ – Vos questions, nos réponses</h2>
-    
-    <div>
+<section
+    class="max-w-4xl mx-auto p-6  text-white rounded-2xl shadow-2xl mt-20"
+    x-data="{
+    openIndex: null,
+    faqs: [
+      { question: `Emminent est-il gratuit ?`, answer: `Oui, Emminent propose une version gratuite avec toutes les fonctionnalités proposées de l'application web.` },
+      { question: `Comment l'IA d’Emminent apprend-elle ?`, answer: `L’assistant est entraîné à partir des ressources pédagogiques du département MMI et évolue grâce aux interactions des étudiants et enseignants. Vos retours permettent d’améliorer ses réponses en continu.` },
+      { question: `Puis-je utiliser Emminent sur mon téléphone ?`, answer: `Oui ! Emminent est accessible depuis un navigateur web et bientôt via une application mobile pour un usage encore plus fluide.` },
+      { question: `L'IA peut-elle remplacer un professeur ?`, answer: `Non, Emminent est un outil d’accompagnement et non un substitut. Il aide à mieux comprendre les cours, mais l’échange avec les enseignants reste essentiel.` },
+      { question: `Comment puis-je contribuer au projet ?`, answer: `Vous pouvez tester l’outil, donner vos retours, proposer des améliorations et même participer à son développement si vous avez des compétences en design ou en développement.` },
+      { question: `Mes données sont-elles protégées ?`, answer: `Oui ! La confidentialité et la sécurité sont au cœur d’Emminent. Aucune donnée sensible n’est partagée sans votre accord. Nous respectons les réglementations en vigueur.` }
+    ]
+  }"
+>
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 tracking-tight">
+        <span class="text-white">FAQ</span> – <span
+            >Vos questions, nos réponses</span
+        >
+    </h2>
+
+    <div class="space-y-4">
         <template x-for="(faq, index) in faqs" :key="index">
-            <div class="border-b border-white/20 py-4">
-                <button 
-                    class="w-full flex justify-between items-center text-left text-lg font-semibold cursor-pointer focus:outline-none"
-                    x-on:click="openIndex = openIndex === index ? null : index">
+            <div
+                class="bg-[#112240] rounded-xl p-4 shadow-md transition hover:shadow-lg duration-300"
+            >
+                <button
+                    class="flex justify-between items-center w-full text-left text-lg md:text-xl font-medium focus:outline-none"
+                    @click="openIndex === index ? openIndex = null : openIndex = index"
+                >
                     <span x-text="faq.question"></span>
-                    <span class="transition-transform" x-bind:class="{ 'rotate-180': openIndex === index, 'rotate-0': openIndex !== index }">▼</span>
+                    <svg
+                        :class="{ 'rotate-180': openIndex === index }"
+                        class="w-5 h-5 transform transition-transform duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            d="M19 9l-7 7-7-7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
                 </button>
-                <p class="mt-2 text-gray-300" x-show="openIndex === index" x-transition x-text="faq.answer"></p>
+                <div
+                    x-show="openIndex === index"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 max-h-0"
+                    x-transition:enter-end="opacity-100 max-h-40"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 max-h-40"
+                    x-transition:leave-end="opacity-0 max-h-0"
+                    class="overflow-hidden mt-3 text-gray-300 text-base md:text-lg"
+                >
+                    <p x-text="faq.answer"></p>
+                </div>
             </div>
         </template>
     </div>

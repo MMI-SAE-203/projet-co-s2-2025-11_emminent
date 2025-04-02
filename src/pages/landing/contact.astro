@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Layoutlanding.astro";
+---
+
+<Layout>
+   
+    <section
+        class="min-h-screen bg-[#0A1A33] flex items-center justify-center px-4 py-16 font-[Orbitron]"
+    >
+        <div class="!bg-white max-w-xl w-full p-8 rounded-2xl shadow-2xl">
+            <h2
+                class="!text-[#692AC2] text-xl md:text-2xl font-bold text-center mb-8 leading-snug"
+            >
+                Des questions, des suggestions de templates…<br />
+                Nous sommes là pour vous répondre !
+            </h2>
+
+            <form class="space-y-5">
+                <input
+                    type="text"
+                    placeholder="Nom"
+                    class="w-full !bg-[#692AC2] !text-white placeholder-white px-4 py-3 rounded-full focus:outline-none"
+                />
+                <input
+                    type="email"
+                    placeholder="E-mail"
+                    class="w-full !bg-[#692AC2] !text-white placeholder-white px-4 py-3 rounded-full focus:outline-none"
+                />
+                <textarea
+                    placeholder="Message"
+                    rows="5"
+                    class="w-full !bg-[#692AC2] !text-white placeholder-white px-4 py-3 rounded-2xl resize-none focus:outline-none"
+                ></textarea>
+
+                <div class="text-center">
+                    <button
+                        type="submit"
+                        class="!bg-cyan-400 hover:!bg-cyan-300 transition text-black font-bold px-8 py-2 rounded-full"
+                    >
+                        ENVOYER
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</Layout>
