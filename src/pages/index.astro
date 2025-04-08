@@ -7,7 +7,7 @@ import Team from "../components/Team.astro";
 ---
 
 <Layout>
-	<section
+	<section id="emminent"
 		class="relative flex flex-col-reverse md:flex-row items-center justify-between gap-8 px-6 py-12"
 	>
 		<div class="md:w-1/2">
@@ -70,7 +70,7 @@ import Team from "../components/Team.astro";
 				class="w-[350px] md:w-[500px] xl:w-[600px] pointer-events-none"
 			/>
 		</div>
-		<div class="max-w-lg">
+		<div class="max-w-lg" id="fonctionalites">
 			<h2
 				class="text-2xl md:text-3xl font-semibold flex items-center gap-2"
 			>
@@ -268,7 +268,9 @@ import Team from "../components/Team.astro";
 		et rédaction dès aujourd’hui.
 	</p>
 	<Button className="mx-auto" link="/appli" text="Découvrir" />
+	<section id="FAQ">
 	<FAQ />
+	</section>
 	<section
 		class="text-white py-6 flex flex-col md:flex-row justify-between max-w-6xl mx-auto"
 	>
@@ -281,5 +283,7 @@ import Team from "../components/Team.astro";
 		</div>
 		<Button className="md:mt-0" link="/contact" text="Contactez-nous" />
 	</section>
+	<section id="team">
 	<Team />
+	</section>
 </Layout>

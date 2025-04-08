@@ -1,0 +1,101 @@
+---
+import Marqueur from "../../assets/icons/adresse.svg";
+import Telephone from "../../assets/icons/appel.svg";
+import Email from "../../assets/icons/mail.svg";
+import Layout from "../../layouts/Layoutappli.astro";
+---
+
+<Layout>
+    <!-- Bandeau violet sur toute la page -->
+    <!-- Bandeau violet plus petit -->
+    <div class="w-full bg-[#52289D] text-white">
+        <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto text-sm"
+        >
+            <!-- Adresse -->
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <Marqueur class="w-5 h-5" />
+                    <h3 class="text-base font-semibold">Adresse</h3>
+                </div>
+                <p class="pl-7 leading-snug">
+                    4 place Lucien Tharradin<br />25200 Montbéliard
+                </p>
+            </div>
+            <!-- Téléphone -->
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <Telephone class="w-5 h-5" />
+                    <h3 class="text-base font-semibold">Téléphone</h3>
+                </div>
+                <p class="pl-7 leading-snug">07 52 67 45 45</p>
+            </div>
+            <!-- Email -->
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                    <Email class="w-5 h-5" />
+                    <h3 class="text-base font-semibold">E-mail</h3>
+                </div>
+                <p class="pl-7 break-words leading-snug">
+                    emminent.contact@gmail.com
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire + logo comme avant -->
+    <div class="px-6 py-10 flex flex-col md:flex-row gap-10 items-center">
+        <!-- Formulaire à gauche -->
+        <div class="w-full md:w-1/2 space-y-6">
+            <h2
+                class="text-[#692AC2] text-lg md:text-xl font-semibold leading-snug"
+            >
+                Des questions, des suggestions de templates…<br />
+                Nous sommes là pour vous répondre !
+            </h2>
+
+            <form
+                action="https://formspree.io/f/xnnpgjyq"
+                method="POST"
+                class="space-y-4"
+            >
+                <input
+                    type="text"
+                    name="nom"
+                    placeholder="Nom"
+                    required
+                    class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-full focus:outline-none"
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="E-mail"
+                    required
+                    class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-full focus:outline-none"
+                />
+                <textarea
+                    name="message"
+                    placeholder="Message"
+                    rows="5"
+                    required
+                    class="w-full bg-[#692AC2] text-white placeholder-white px-4 py-2 rounded-2xl resize-none focus:outline-none"
+                ></textarea>
+                <button
+                    type="submit"
+                    class="bg-cyan-400 text-black px-6 py-2 font-bold rounded-full hover:bg-cyan-300 transition"
+                >
+                    ENVOYER
+                </button>
+            </form>
+        </div>
+
+        <!-- Logo à droite -->
+        <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+            <img
+                src="../../../src/assets/icons/logo.svg"
+                alt="Logo Emminent"
+                class="w-60 md:w-72 lg:w-80"
+            />
+        </div>
+    </div>
+</Layout>
