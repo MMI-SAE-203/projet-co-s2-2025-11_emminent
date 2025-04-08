@@ -1,0 +1,90 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+import { getPrompts } from "../../../backend/backend.mjs";
+
+const prompts = await getPrompts();
+
+// Extraire domaines et thèmes
+const domaines = [...new Set(prompts.map((p) => p.domaine))];
+const themes = [...new Set(prompts.map((p) => p.theme))];
+---
+
+<Layout>
+    <main class="max-w-7xl mx-auto px-6 py-14 text-white">
+        <h1 class="text-4xl font-bold text-[#00C8E9] text-center mb-10">
+            Partage de prompts
+        </h1>
+        <div class="text-center mb-10">
+            <a
+                href="/appli/ajouter"
+                class="bg-[#00C8E9] hover:bg-[#00AFC1] text-black font-bold px-6 py-3 rounded-full transition"
+            >
+                ➕ Ajouter un prompt
+            </a>
+        </div>
+
+        <!-- Filtres -->
+        <div class="flex flex-col md:flex-row gap-4 justify-center mb-10">
+            <select
+                id="domaine-filter"
+                class="bg-[#1E1B3A] border border-[#52289D] px-4 py-2 rounded-full text-white"
+            >
+                <option value="">Tous les domaines</option>
+                {domaines.map((d) => <option value={d}>{d}</option>)}
+            </select>
+            <select
+                id="theme-filter"
+                class="bg-[#1E1B3A] border border-[#52289D] px-4 py-2 rounded-full text-white"
+            >
+                <option value="">Tous les thèmes</option>
+                {themes.map((t) => <option value={t}>{t}</option>)}
+            </select>
+        </div>
+
+        <!-- Liste des prompts -->
+        <div id="prompt-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+                prompts.map((p) => (
+                    <div
+                        class="bg-[#1E1B3A] p-6 rounded-xl shadow-md flex flex-col justify-between"
+                        data-domaine={p.domaine}
+                        data-theme={p.theme}
+                    >
+                        <div>
+                            <h3 class="text-lg font-semibold text-[#00C8E9] mb-2">
+                                {p.theme}
+                            </h3>
+                            <p class="text-gray-300 text-sm">{p.contenu}</p>
+                        </div>
+                        <button
+                            class="mt-4 bg-[#00C8E9] hover:bg-[#00AFC1] text-black font-semibold px-4 py-2 rounded-full transition"
+                            onClick={`navigator.clipboard.writeText(\`${p.contenu}\`)`}
+                        >
+                            Copier le prompt
+                        </button>
+                    </div>
+                ))
+            }
+        </div>
+
+        <script type="module" is:inline>
+            const domaineFilter = document.getElementById("domaine-filter");
+            const themeFilter = document.getElementById("theme-filter");
+            const prompts = document.querySelectorAll("#prompt-list > div");
+
+            function filterPrompts() {
+                const domaine = domaineFilter.value;
+                const theme = themeFilter.value;
+
+                prompts.forEach((p) => {
+                    const matchD = !domaine || p.dataset.domaine === domaine;
+                    const matchT = !theme || p.dataset.theme === theme;
+                    p.style.display = matchD && matchT ? "block" : "none";
+                });
+            }
+
+            domaineFilter.addEventListener("change", filterPrompts);
+            themeFilter.addEventListener("change", filterPrompts);
+        </script>
+    </main>
+</Layout>

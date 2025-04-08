@@ -3,8 +3,8 @@ const { text, link, className = "" } = Astro.props;
 ---
 
 <a
-    href={link}
-    class={`flex m-8 gap-3 bg-[#00C8E9] px-6 py-3 rounded-full shadow-md text-lg font-semibold text-black transition hover:bg-[#00AFC1] w-max  ${className}`}
+  href={link}
+  class={`mx-auto w-fit flex items-center justify-center gap-3 bg-[#00C8E9] px-6 py-3 rounded-full shadow-md text-lg font-semibold text-black transition hover:bg-[#00AFC1] ${className}`}
 >
-    {text}
+  {text}
 </a>

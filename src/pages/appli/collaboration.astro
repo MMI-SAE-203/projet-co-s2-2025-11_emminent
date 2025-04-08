@@ -1,0 +1,141 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+import { getTemplates, addTemplate } from "../../../backend/backend.mjs";
+
+let message = "";
+
+// Gestion du formulaire
+if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const data = Object.fromEntries(formData.entries());
+
+    if (!data.title || !data.url) {
+        message = "❌ Les champs sont requis.";
+    } else {
+        const result = await addTemplate(data);
+        console.log("📤 Résultat du backend :", result);
+        message = result.message;
+    }
+}
+
+// Récupération des templates pour la galerie
+const templates = await getTemplates();
+const templatesWithThumbnails = await Promise.all(
+    templates.map(async (t) => {
+        const res = await fetch(
+            `https://api.microlink.io?url=${encodeURIComponent(t.url)}`,
+        );
+        const json = await res.json();
+        return {
+            title: t.title,
+            url: t.url,
+            thumbnail:
+                json.data.image?.url ||
+                "https://via.placeholder.com/600x400?text=Pas+de+visuel",
+        };
+    }),
+);
+---
+
+<Layout>
+    <div class="max-w-3xl mx-auto py-10">
+        <h1 class="text-3xl font-bold mb-6 text-center">
+            Galerie de templates
+        </h1>
+
+        <!-- Galerie AlpineJS -->
+        <div
+            x-data={`{ templates: ${JSON.stringify(templatesWithThumbnails)}, index: 0 }`}
+            class="flex flex-col items-center"
+        >
+            <template x-if="templates.length > 0">
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                        <span x-text="templates[index].title"></span>
+                    </h2>
+
+                    <img
+                        x-bind:src="templates[index].thumbnail"
+                        class="w-full max-w-md h-64 object-cover rounded-lg shadow-lg mx-auto"
+                        alt="Aperçu du template"
+                    />
+
+                    <div class="mt-4">
+                        <a
+                            x-bind:href="templates[index].url"
+                            target="_blank"
+                            class="text-blue-600 underline"
+                        >
+                            Voir la présentation
+                        </a>
+                    </div>
+
+                    <!-- Boutons de navigation -->
+                    <div class="flex gap-4 justify-center mt-6">
+                        <button
+                            @click="index = (index === 0 ? templates.length - 1 : index - 1)"
+                            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                        >
+                            Précédent
+                        </button>
+                        <button
+                            @click="index = (index === templates.length - 1 ? 0 : index + 1)"
+                            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                        >
+                            Suivant
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="templates.length === 0">
+                <p class="text-gray-500 mt-4">Aucun template à afficher.</p>
+            </template>
+        </div>
+    </div>
+
+    <!-- Formulaire AJOUT (hors de AlpineJS !) -->
+    <div
+        class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16"
+    >
+        <h2 class="text-2xl font-bold text-[#00C8E9] mb-6 text-center gap-8">
+            ➕ Ajouter un Template Canva
+        </h2>
+
+        {
+            message && (
+                <p class="mb-4 text-sm font-semibold text-[#00C8E9] text-center">
+                    {message}
+                </p>
+            )
+        }
+
+        <form
+            action="/appli/collaboration"
+            method="POST"
+            class="flex flex-col gap-4"
+        >
+            <input
+                type="text"
+                name="title"
+                placeholder="Titre du template"
+                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
+                required
+            />
+
+            <input
+                type="url"
+                name="url"
+                placeholder="Lien Canva"
+                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
+                required
+            />
+
+            <input
+                type="submit"
+                value="Ajouter"
+                class="bg-[#00C8E9] text-black font-bold py-3 rounded-full hover:bg-[#00AFC1] transition cursor-pointer"
+            />
+        </form>
+    </div>
+</Layout>

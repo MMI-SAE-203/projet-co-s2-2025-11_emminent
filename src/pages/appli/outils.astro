@@ -5,137 +5,163 @@ import SectionCard from "../../components/cardoutils.astro";
 ---
 
 <Layout>
-    <div class="container mx-auto px-6 py-12">
-        <h1 class="text-3xl font-bold text-center">
-            Des outils intelligents pour mieux apprendre
-        </h1>
-        <p class="text-center mt-4">
-            Que vous soyez en pleines révisions d’examens ou que vous souhaitiez
-            simplement mieux organiser votre apprentissage, Emminent vous
-            propose des outils adaptés à votre rythme et vos besoins.
-        </p>
+    <main class="text-white px-6 py-16 space-y-24">
+        <!-- HERO -->
+        <section class="text-center max-w-4xl mx-auto space-y-6">
+            <h1
+                class="text-4xl md:text-5xl font-extrabold text-[#00C8E9] leading-tight"
+            >
+                Des outils d’IA conçus pour te faire gagner en efficacité
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300">
+                Que tu sois en pleine préparation de soutenance ou en stress de
+                dernière minute, Emminent t'accompagne avec des outils
+                puissants, simples et faits pour MMI.
+            </p>
+            <Button link="/appli" text="Tester Emminent maintenant" />
+        </section>
 
-        <div class="text-center mt-6">
-            <Button
-                className="inline-block"
-                link="/festival"
-                text="Tester Emminent"
-            />
-        </div>
+        <!-- CODE SECTION -->
+        <section
+            class="flex flex-col-reverse md:flex-row items-center gap-10 max-w-6xl mx-auto"
+        >
+            <div class="md:w-1/2 space-y-4">
+                <h2 class="text-3xl font-bold text-[#00C8E9]">
+                    Code plus vite, débogue plus intelligemment
+                </h2>
+                <p class="text-gray-300">
+                    Une IA qui comprend ton HTML, ton CSS, ton JavaScript. Elle
+                    t’explique les erreurs, te suggère des optimisations et
+                    t’accompagne ligne par ligne.
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                    <li>Résolution d’erreurs instantanée</li>
+                    <li>Création de composants HTML/CSS/JS</li>
+                    <li>Suggestions d’optimisation</li>
+                    <li>Guidage pas à pas</li>
+                </ul>
+                <Button link="/appli" text="Coder avec Emminent" />
+            </div>
+            <div class="md:w-1/2">
+                <img
+                    src="../../src/assets/img/outil.webp"
+                    alt="Code IA"
+                    class="rounded-xl shadow-lg w-full"
+                />
+            </div>
+        </section>
 
-        <h2 class="text-2xl font-semibold mt-12">Ia spécialisé pour le dev</h2>
-        <p class="mt-2">
-            Une intelligence artificielle pensée pour les étudiants et
-            enseignants MMI. Ici, pas d’IA qui va trop loin : elle comprend les
-            attentes pédagogiques
-        </p>
+        <!-- COMMUNICATION SECTION -->
+        <section
+            class="flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto"
+        >
+            <div class="md:w-1/2">
+                <img
+                    src="../../src/assets/img/com.webp"
+                    alt="Com IA"
+                    class="rounded-xl shadow-lg w-full"
+                />
+            </div>
+            <div class="md:w-1/2 space-y-4">
+                <h2 class="text-3xl font-bold text-[#00C8E9]">
+                    Crée des stratégies de com' comme un pro
+                </h2>
+                <p class="text-gray-300">
+                    Tu galères à faire un SWOT ou définir une cible ? Emminent
+                    te propose des outils qui t’aident à formuler, structurer et
+                    imaginer des campagnes claires et pertinentes.
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                    <li>Rédaction assistée de SWOT, persona, messages clés</li>
+                    <li>Analyse de ton, stratégie digitale, KPIs</li>
+                    <li>Création de visuels avec IA</li>
+                </ul>
+                <Button link="/appli" text="Booster ma com’" />
+            </div>
+        </section>
 
-        <div class="flex justify-center mt-6">
-            <img
-                src="../../src/assets/img/group38.webp"
-                alt="Aperçu du générateur de fiches"
-                class="rounded-lg shadow-lg max-w-full"
-            />
-        </div>
+        <!-- DESIGN SECTION -->
+        <section
+            class="flex flex-col-reverse md:flex-row items-center gap-10 max-w-6xl mx-auto"
+        >
+            <div class="md:w-1/2 space-y-4">
+                <h2 class="text-3xl font-bold text-[#00C8E9]">
+                    Design plus pro, plus cohérent, plus rapide
+                </h2>
+                <p class="text-gray-300">
+                    Besoin de créer une charte, un moodboard ou un prototype ?
+                    Emminent te propose des outils design pensés pour MMI.
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                    <li>Conseils d’harmonie visuelle et UI/UX</li>
+                    <li>Génération d’identités visuelles</li>
+                    <li>Prototypage assisté</li>
+                </ul>
+                <Button link="/appli" text="Designer avec Emminent" />
+            </div>
+            <div class="md:w-1/2">
+                <img
+                    src="../../src/assets/img/design.webp"
+                    alt="Design IA"
+                    class="rounded-xl shadow-lg w-full"
+                />
+            </div>
+        </section>
 
-        <h3 class="text-xl font-semibold mt-8">Fonctionnalités :</h3>
-        <ul class="list-none pl-5 mt-2 space-y-2 text-white">
-            <li>✔ Résolution de code</li>
-            <li>✔ Créations de composants</li>
-            <li>✔ Explique les erreurs</li>
-            <li>✔ Optimisation</li>
-            <li>✔ Guidage pas à pas</li>
-        </ul>
+        <!-- REDACTION SECTION -->
+        <section
+            class="flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto"
+        >
+            <div class="md:w-1/2">
+                <img
+                    src="../../src/assets/img/dossier.webp"
+                    alt="Dossier IA"
+                    class="rounded-xl shadow-lg w-full"
+                />
+            </div>
+            <div class="md:w-1/2 space-y-4">
+                <h2 class="text-3xl font-bold text-[#00C8E9]">
+                    Des dossiers clairs, structurés et efficaces
+                </h2>
+                <p class="text-gray-300">
+                    Soutenance, rendu ou projet tuteuré : Emminent t’aide à
+                    structurer ton dossier, à reformuler et à renforcer
+                    l’argumentaire.
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-1">
+                    <li>Plans intelligents adaptés au type de livrable</li>
+                    <li>Rédaction claire, cohérente et fluide</li>
+                    <li>Corrections + enrichissement du contenu</li>
+                </ul>
+                <Button link="/appli" text="Rédiger avec Emminent" />
+            </div>
+        </section>
 
-        <div class="text-center mt-6">
-            <Button
-                className="inline-block"
-                link="/festival"
-                text="Créer une fiche"
-            />
-        </div>
-        <SectionCard
-            title="La spécialisée pour la com’"
-            description="Une intelligence artificielle taillée pour les étudiants et enseignants en communication."
-            features={[
-                "Rédaction optimisée (Persona, Swot, KPI ...)",
-                "Analyse de ton",
-                "Stratégie digitale",
-                "Création de visuels",
-                "Optimisation SEO",
-            ]}
-            buttonText="Com’ avec Emminent"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Ia spécialisé pour le design"
-            description="Une intelligence artificielle pensée pour aider les étudiants et enseignants en design."
-            features={[
-                "Guidelines et tendances",
-                "Harmonie visuelle",
-                "Identité visuelle",
-                "Optimisation UX/UI",
-                "Prototypage assist",
-            ]}
-            buttonText="Designer avec Emminent"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Rédaction de dossier"
-            description="Une IA conçue pour accompagner la rédaction des dossiers MMI, en veillant à respecter les exigences académiques et professionnelles."
-            features={[
-                "Plan structuré",
-                "Rédaction claire et consice",
-                "Cohérence et argumentation",
-                "Correction",
-                "Veille et sources",
-            ]}
-            buttonText="Designer avec Emminent"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Planificateur de révisions"
-            description="Planifiez vos sessions de révisions pour ne plus rien oublier."
-            features={[
-                "Création d’un emploi du temps personnalisé",
-                "Rappels automatiques",
-                "Suggestions d’optimisation du planning",
-            ]}
-            buttonText="Planifier mes révisions"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Mode révision express"
-            description="Révisez efficacement en un minimum de temps."
-            features={[
-                "Séances courtes et ciblées",
-                "Focus sur les points clés",
-                "Techniques de mémorisation rapide",
-            ]}
-            buttonText="Lancer une session express"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Situations d’examen"
-            description="Entraînez-vous comme si vous étiez en épreuve réelle."
-            features={[
-                "Simulation d’examens types",
-                "Gestion du temps et conditions réelles",
-                "Correction détaillée et feedback instantané",
-            ]}
-            buttonText="S’entraîner maintenant"
-            buttonLink="#"
-        />
-        <SectionCard
-            title="Quiz adaptatifs"
-            description="Testez vos connaissances avec des quiz qui s’adaptent à votre niveau."
-            features={[
-                "Questions évolutives basées sur vos résultats",
-                "Corrections et explications détaillées",
-                "Suivi de votre progression",
-            ]}
-            buttonText="Commencer un quiz"
-            buttonLink="#"
-        />
-    </div>
+        <!-- BLOC OUTILS BOOST -->
+        <section
+            class="bg-[#1E1B3A] rounded-xl p-10 max-w-6xl mx-auto text-center space-y-10"
+        >
+            <h2 class="text-3xl font-bold text-[#00C8E9]">
+                Et bien plus encore pour booster ton apprentissage
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6 text-left text-gray-300">
+                <ul class="space-y-2">
+                    <li> Révision express (5 minutes chrono)</li>
+                    <li> Planificateur intelligent</li>
+                    <li> Suivi de progression par matière</li>
+                </ul>
+                <ul class="space-y-2">
+                    <li> Glossaire MMI interactif</li>
+                    <li> Générateur d’idées de projet</li>
+                    <li> Analyse de feedbacks de projets</li>
+                </ul>
+                <ul class="space-y-2">
+                    <li> Quiz adaptatifs et ciblés</li>
+                    <li> Mode focus & gestion du temps</li>
+                    <li> Simulations d’examens</li>
+                </ul>
+            </div>
+            <Button link="/appli" text="Découvrir tous les outils" />
+        </section>
+    </main>
 </Layout>
