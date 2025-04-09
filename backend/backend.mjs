@@ -49,3 +49,26 @@ export async function addPrompt(data) {
         };
     }
 }
+
+export async function votePrompt(promptId, type = "like") {
+    try {
+        const prompt = await pb.collection("prompts").getOne(promptId);
+        const likes = prompt.likes || 0;
+        const dislikes = prompt.dislikes || 0;
+
+        const newData =
+            type === "like"
+                ? { likes: likes + 1 }
+                : { dislikes: dislikes + 1 };
+
+        await pb.collection("prompts").update(promptId, newData);
+
+        return {
+            success: true,
+            likes: newData.likes ?? likes,
+            dislikes: newData.dislikes ?? dislikes
+        };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}

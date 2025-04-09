@@ -1,0 +1,31 @@
+---
+import { pb } from "../../../utils/server";
+import Layout from "../../../layouts/Layoutappli.astro";
+import { formatDate } from "../../../utils/date";
+import type {
+    FilmResponse,
+    PersonneResponse,
+    RoleResponse,
+} from "../../../pocketbase-types";
+import GithubSlugger from "github-slugger";
+
+export const prerender = false;
+const slugger = new GithubSlugger();
+
+const id = Astro.params.id;
+
+const p = await Astro.locals.pb
+    .collection<PersonneResponse>("personne")
+    .getOne(id!);
+---
+
+<Layout pageTitle={p.nom}>
+    <h1 class="text-5xl font-semibold">{p.nom}</h1>
+    <p>{p.date_naissance}</p>
+
+    {
+        Astro.locals.pb.authStore.isValid && (
+            <a href={`/personnes/edit/${p.id}`}>Edit</a>
+        )
+    }
+</Layout>

@@ -1,0 +1,72 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+
+export const prerender = false;
+const locals = Astro.locals;
+
+if (Astro.request.method === "POST") {
+    try {
+        const data = await Astro.request.formData();
+        const email = data.get("email") as string;
+        const password = data.get("password") as string;
+        const nom = data.get("nom") as string;
+
+        await locals.pb.collection("users").create({
+            email,
+            password,
+            passwordConfirm: password,
+            nom,
+        });
+
+        return Astro.redirect("/appli/profil");
+    } catch (e) {
+        console.error("Erreur d'inscription", e);
+    }
+}
+---
+
+<Layout pageTitle="Inscription">
+    <main class="max-w-lg mx-auto py-12 text-amber-50">
+        <h1 class="text-4xl font-bold mb-6">Créer un compte</h1>
+        <form action="" method="post" class="grid gap-4">
+            <label class="flex flex-col">
+                Nom
+                <input
+                    type="text"
+                    name="nom"
+                    required
+                    class="border px-3 py-2 rounded"
+                />
+            </label>
+            <label class="flex flex-col">
+                Adresse e-mail
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    class="border px-3 py-2 rounded"
+                />
+            </label>
+            <label class="flex flex-col">
+                Mot de passe
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="border px-3 py-2 rounded"
+                />
+            </label>
+            <input
+                class="bg-green-600 text-white rounded-lg px-4 py-2 cursor-pointer"
+                type="submit"
+                value="S'inscrire"
+            />
+        </form>
+        <p class="mt-4">
+            Déjà un compte ?
+            <a href="/appli/login" class="text-blue-600 underline"
+                >Se connecter</a
+            >
+        </p>
+    </main>
+</Layout>

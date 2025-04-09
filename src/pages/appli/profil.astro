@@ -1,0 +1,150 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+
+export const prerender = false;
+
+const pb = Astro.locals.pb;
+
+if (!pb.authStore.isValid) {
+    return Astro.redirect("/appli/login");
+}
+
+const user = pb.authStore.model;
+let message = "";
+
+if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const action = formData.get("action");
+
+    if (action === "logout") {
+        pb.authStore.clear();
+        return Astro.redirect("/appli/login");
+    }
+
+    if (action === "delete") {
+        await pb.collection("users").delete(user.id);
+        pb.authStore.clear();
+        return Astro.redirect("/appli/register");
+    }
+
+    if (action === "changepass") {
+        const oldPass = formData.get("oldPassword")?.toString();
+        const newPass = formData.get("newPassword")?.toString();
+        const confirmPass = formData.get("confirmPassword")?.toString();
+
+        if (!oldPass || !newPass || !confirmPass) {
+            message = "Tous les champs sont requis.";
+        } else if (newPass !== confirmPass) {
+            message = "Les mots de passe ne correspondent pas.";
+        } else {
+            try {
+                const { PocketBase } = await import("pocketbase");
+                const pbTemp = new PocketBase("http://127.0.0.1:8090");
+
+                await pbTemp
+                    .collection("users")
+                    .authWithPassword(user.email, oldPass);
+
+                await pb.collection("users").update(user.id, {
+                    password: newPass,
+                    passwordConfirm: newPass,
+                });
+
+                message = "Mot de passe modifié avec succès ✅";
+            } catch (err) {
+                console.error("Erreur changement mot de passe :", err);
+                message = "❌ Ancien mot de passe incorrect.";
+            }
+        }
+    }
+}
+---
+
+<Layout pageTitle="Mon profil">
+    <main class="max-w-lg mx-auto py-16 text-white">
+        <h1 class="text-4xl font-bold mb-8 text-center">Mon profil</h1>
+
+        <div
+            class="space-y-2 mb-8 bg-gray-800 p-6 rounded-lg border border-gray-700 shadow"
+        >
+            <p><strong>Nom :</strong> {user.nom}</p>
+            <p><strong>Email :</strong> {user.email}</p>
+            <p><strong>ID :</strong> {user.id}</p>
+        </div>
+
+        <form method="POST" class="flex flex-col gap-4 mb-12">
+            <button
+                type="submit"
+                name="action"
+                value="logout"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded"
+            >
+                Se déconnecter
+            </button>
+
+            <button
+                type="submit"
+                name="action"
+                value="delete"
+                class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded"
+                onclick="return confirm('Supprimer définitivement votre compte ?')"
+            >
+                Supprimer mon compte
+            </button>
+        </form>
+
+        <h2 class="text-2xl font-semibold mb-4">Changer le mot de passe</h2>
+
+        {
+            message && (
+                <p
+                    class={`mb-6 ${message.startsWith("❌") ? "text-red-400" : "text-green-400"}`}
+                >
+                    {message}
+                </p>
+            )
+        }
+
+        <form method="POST" class="space-y-4">
+            <input type="hidden" name="action" value="changepass" />
+
+            <label class="block">
+                <span class="block mb-1">Ancien mot de passe</span>
+                <input
+                    type="password"
+                    name="oldPassword"
+                    required
+                    class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                />
+            </label>
+
+            <label class="block">
+                <span class="block mb-1">Nouveau mot de passe</span>
+                <input
+                    type="password"
+                    name="newPassword"
+                    required
+                    class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                />
+            </label>
+
+            <label class="block">
+                <span class="block mb-1">Confirmer le nouveau mot de passe</span
+                >
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    required
+                    class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                />
+            </label>
+
+            <button
+                type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded w-full"
+            >
+                Modifier le mot de passe
+            </button>
+        </form>
+    </main>
+</Layout>

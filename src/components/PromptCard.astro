@@ -1,0 +1,56 @@
+---
+const { prompt } = Astro.props;
+---
+
+<div
+    class="bg-[#1E1B3A] p-6 rounded-xl shadow-md flex flex-col justify-between"
+    data-id={prompt.id}
+    data-domaine={prompt.domaine}
+    data-theme={prompt.theme}
+>
+    <div>
+        <h3 class="text-lg font-semibold text-[#00C8E9] mb-2">
+            {prompt.theme}
+        </h3>
+        <p class="text-gray-300 text-sm">{prompt.contenu}</p>
+    </div>
+
+    <div class="mt-4 flex justify-between items-center gap-2">
+        <button
+            class="bg-[#00C8E9] hover:bg-[#00AFC1] text-black font-semibold px-4 py-2 rounded-full transition text-sm"
+            onClick={`navigator.clipboard.writeText(\`${prompt.contenu}\`)`}
+        >
+            Copier
+        </button>
+
+        <form onSubmit="return false;" class="like-form flex gap-2">
+            <input type="hidden" name="id" value={prompt.id} />
+
+            <!-- Like -->
+            <button
+                class="flex items-center gap-1 bg-white text-black px-3 py-2 rounded-full text-sm hover:bg-gray-300 transition"
+                onClick="votePrompt(this, 'like')"
+            >
+                <img
+                    src="../../src/assets/icons/pouce-haut.svg"
+                    alt="like"
+                    class="w-5 h-5"
+                />
+                <span>{prompt.likes || 0}</span>
+            </button>
+
+            <!-- Dislike -->
+            <button
+                class="flex items-center gap-1 bg-white text-black px-3 py-2 rounded-full text-sm hover:bg-gray-300 transition"
+                onClick="votePrompt(this, 'dislike')"
+            >
+                <img
+                    src="../../src/assets/icons/pouce-bas.svg"
+                    alt="dislike"
+                    class="w-5 h-5"
+                />
+                <span>{prompt.dislikes || 0}</span>
+            </button>
+        </form>
+    </div>
+</div>

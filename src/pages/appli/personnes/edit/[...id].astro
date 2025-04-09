@@ -1,0 +1,116 @@
+---
+import Layout from "../../../../layouts/Layoutappli.astro";
+import {
+    PersonneNationaliteOptions,
+    PersonneProfessionOptions,
+    type PersonneResponse,
+} from "../../../../pocketbase-types";
+import GithubSlugger from "github-slugger";
+
+export const prerender = false;
+
+const pb = Astro.locals.pb;
+const id = Astro.params.id;
+
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const personne = await (id
+        ? await pb.collection("personne").update(id, data)
+        : await pb.collection("personne").create(data));
+
+    return Astro.redirect(
+        `/personnes/${personne.id}-${encodeURIComponent(personne.nom)}`,
+    );
+}
+
+const personne = id
+    ? await pb.collection("personne").getOne(id)
+    : ({} as PersonneResponse);
+---
+
+<Layout pageTitle="Edit personne">
+    <form method="POST" class="*:contents grid grid-cols-2">
+        <input type="hidden" name="id" value={personne.id} />
+        <label>
+            Nationalité
+            <select name="nationalite">
+                {
+                    Object.entries(PersonneNationaliteOptions).map(
+                        ([key, value]) => (
+                            <option
+                                selected={
+                                    personne.nationalite && personne.nationalite
+                                }
+                                value={key}
+                            >
+                                {value}
+                            </option>
+                        ),
+                    )
+                }
+            </select>
+        </label>
+        <label>
+            Nom
+            <input type="text" name="nom" value={personne.nom} />
+        </label>
+        <label>
+            Date de naissance
+            <input
+                type="date"
+                name="date_naissance"
+                value={personne.date_naissance
+                    ? new Date(personne.date_naissance)
+                          .toISOString()
+                          .split("T")[0]
+                    : ""}
+            />
+        </label>
+        <label>
+            Date de décès
+            <input
+                type="date"
+                name="date_deces"
+                value={personne.date_deces
+                    ? new Date(personne.date_deces).toISOString().split("T")[0]
+                    : ""}
+            />
+        </label>
+        <label>
+            Lieu de naissance
+            <input
+                type="text"
+                name="lieu_naissance"
+                value={personne.lieu_naissance}
+            />
+        </label>
+        <label>
+            Profession
+            <fieldset class="block! col-span-2" name="profession">
+                {
+                    Object.entries(PersonneProfessionOptions).map(
+                        ([key, value]) => (
+                            <label>
+                                {key}
+                                <input
+                                    type="checkbox"
+                                    checked={
+                                        personne.profession
+                                            ? personne.profession.includes(
+                                                  value,
+                                              )
+                                            : ""
+                                    }
+                                    value={key}
+                                />
+                                {value}
+                            </label>
+                        ),
+                    )
+                }
+            </fieldset>
+        </label>
+
+        <button type="submit">Créer</button>
+    </form>
+</Layout>

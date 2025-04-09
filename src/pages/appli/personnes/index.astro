@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layoutappli.astro";
+import { pb } from "../../../utils/server";
+import GithubSlugger from "github-slugger";
+
+export const prerender = false;
+
+const personnes = await pb.collection("personne").getFullList();
+
+const slugger = new GithubSlugger();
+---
+
+<Layout pageTitle="Les personnes">
+    {
+        personnes.map((p) => (
+            <a href={`/personnes/${p.id}-${slugger.slug(p.nom)}`}>{p.nom}</a>
+        ))
+    }
+</Layout>
