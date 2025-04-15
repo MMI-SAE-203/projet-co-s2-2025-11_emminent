@@ -1,5 +1,7 @@
-import Pocketbase from 'pocketbase'
-import type { TypedPocketBase } from '../pocketbase-types'
+import PocketBase from "pocketbase";
 
-export const pb = new Pocketbase(import.meta.env.PUBLIC_VITE_POCKETBASE_URL) as TypedPocketBase
+const pb = new PocketBase("http://127.0.0.1:8090/");
 
+export default async function getContext({ locals }) {
+    locals.pb = pb;
+}

@@ -10,21 +10,27 @@ export async function getTemplates() {
 
 export async function addTemplate(data) {
     try {
-        console.log("📤 Données envoyées à PocketBase :", data); // <--- ajoute ça
+        console.log("📤 Données envoyées à PocketBase :", data);
 
-        await pb.collection("Templates").create(data);
+        await pb.collection("Templates").create({
+            title: data.title,
+            url: data.url,
+            auteur: data.auteur // 👈 ici on envoie le nom de l'utilisateur
+        });
+
         return {
             success: true,
-            message: "✅ Le template a été ajouté avec succès.",
+            message: "Le template a été ajouté avec succès.",
         };
     } catch (error) {
-        console.error("❌ Erreur PocketBase :", error);
+        console.error(" Erreur PocketBase :", error);
         return {
             success: false,
-            message: "❌ Une erreur est survenue : " + error.message,
+            message: " Une erreur est survenue : " + error.message,
         };
     }
 }
+
 
 // Fonction backend PocketBase
 export async function getPrompts() {

@@ -3,6 +3,8 @@ import Logo from "../assets/icons/Logo.svg";
 import Logomobile from "../assets/icons/LogoMobile.svg";
 const currentPath = Astro.url.pathname;
 import Utilisateur from "../assets/icons/Utilisateurs.svg";
+
+const locals = Astro.locals;
 ---
 
 <header
@@ -44,9 +46,17 @@ import Utilisateur from "../assets/icons/Utilisateurs.svg";
             >Collaboration et Projets</a
         >
         <a href="/appli/contact" class="hover:text-[#001733]">Contact</a>
-        <a href="/appli/login">
-            <Utilisateur class="w-full h-10 mr-2" />
-        </a>
+        {
+            locals.pb.authStore.isValid ? (
+                <a href="/appli/profil">
+                    <Utilisateur class="w-full h-10 mr-2" />
+                </a>
+            ) : (
+                <a href="/appli/login">
+                    <Utilisateur class="w-full h-10 mr-2" />
+                </a>
+            )
+        }
     </nav>
 </header>
 

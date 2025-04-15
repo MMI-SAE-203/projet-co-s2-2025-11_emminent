@@ -1,0 +1,63 @@
+---
+// src/pages/admin/login.astro
+import Layout from "../../../layouts/Layoutappli.astro";
+
+export const prerender = false;
+const locals = Astro.locals;
+let erreur = "";
+
+if (Astro.request.method === "POST") {
+    try {
+        const form = await Astro.request.formData();
+        const email = form.get("email") as string;
+        const password = form.get("password") as string;
+
+        await locals.pb.admins.authWithPassword(email, password);
+        return Astro.redirect("/appli/admin/autorisation");
+    } catch (e) {
+        erreur = "Échec de connexion : identifiants invalides.";
+        console.error(e);
+    }
+}
+---
+
+<Layout pageTitle="Connexion Admin">
+    <main class="max-w-md mx-auto py-16 text-white">
+        <h1 class="text-4xl font-bold mb-8 text-center">
+            Connexion Superadmin
+        </h1>
+        {erreur && <p class="text-red-500 text-center mb-4">{erreur}</p>}
+
+        <form method="POST" class="space-y-6">
+            <label class="block">
+                <span class="block mb-1">Adresse e-mail (admin)</span>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                />
+            </label>
+
+            <label class="block">
+                <span class="block mb-1">Mot de passe</span>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                />
+            </label>
+
+            <input
+                type="submit"
+                value="Connexion"
+                class="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-2 rounded cursor-pointer"
+            />
+        </form>
+    </main>
+</Layout>
+
+--- // Note : utilise bien `locals.pb.admins` pour garder la session compatible
+avec le middleware. // Le cookie est automatiquement synchronisé par le
+middleware après redirection.

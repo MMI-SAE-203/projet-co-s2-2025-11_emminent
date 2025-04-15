@@ -1,61 +1,54 @@
 ---
+// src/pages/appli/profil.astro
 import Layout from "../../layouts/Layoutappli.astro";
-
 export const prerender = false;
 
-const pb = Astro.locals.pb;
+const locals = Astro.locals;
+const user = locals.pb.authStore.record;
 
-if (!pb.authStore.isValid) {
+if (!user) {
     return Astro.redirect("/appli/login");
 }
 
-const user = pb.authStore.model;
 let message = "";
 
 if (Astro.request.method === "POST") {
-    const formData = await Astro.request.formData();
-    const action = formData.get("action");
+    const form = await Astro.request.formData();
+    const action = form.get("action");
 
-    if (action === "logout") {
-        pb.authStore.clear();
-        return Astro.redirect("/appli/login");
-    }
-
-    if (action === "delete") {
-        await pb.collection("users").delete(user.id);
-        pb.authStore.clear();
-        return Astro.redirect("/appli/register");
-    }
-
-    if (action === "changepass") {
-        const oldPass = formData.get("oldPassword")?.toString();
-        const newPass = formData.get("newPassword")?.toString();
-        const confirmPass = formData.get("confirmPassword")?.toString();
-
-        if (!oldPass || !newPass || !confirmPass) {
-            message = "Tous les champs sont requis.";
-        } else if (newPass !== confirmPass) {
-            message = "Les mots de passe ne correspondent pas.";
-        } else {
-            try {
-                const { PocketBase } = await import("pocketbase");
-                const pbTemp = new PocketBase("http://127.0.0.1:8090");
-
-                await pbTemp
-                    .collection("users")
-                    .authWithPassword(user.email, oldPass);
-
-                await pb.collection("users").update(user.id, {
-                    password: newPass,
-                    passwordConfirm: newPass,
-                });
-
-                message = "Mot de passe modifié avec succès ✅";
-            } catch (err) {
-                console.error("Erreur changement mot de passe :", err);
-                message = "❌ Ancien mot de passe incorrect.";
-            }
+    try {
+        if (action === "logout") {
+            locals.pb.authStore.clear();
+            return Astro.redirect("/appli/login");
         }
+
+        if (action === "delete") {
+            await locals.pb.collection("users").delete(user.id);
+            locals.pb.authStore.clear();
+            return Astro.redirect("/appli/register");
+        }
+
+        if (action === "changepass") {
+            const oldPassword = form.get("oldPassword") as string;
+            const newPassword = form.get("newPassword") as string;
+            const confirmPassword = form.get("confirmPassword") as string;
+
+            if (newPassword !== confirmPassword)
+                throw new Error("Les mots de passe ne correspondent pas.");
+
+            await locals.pb
+                .collection("users")
+                .authWithPassword(user.email, oldPassword);
+            await locals.pb.collection("users").update(user.id, {
+                password: newPassword,
+                passwordConfirm: newPassword,
+            });
+
+            message = "Mot de passe modifié avec succès.";
+        }
+    } catch (e) {
+        message = "Une erreur est survenue.";
+        console.error(e);
     }
 }
 ---
@@ -64,12 +57,13 @@ if (Astro.request.method === "POST") {
     <main class="max-w-lg mx-auto py-16 text-white">
         <h1 class="text-4xl font-bold mb-8 text-center">Mon profil</h1>
 
+        {message && <p class="text-green-400 text-center mb-4">{message}</p>}
+
         <div
             class="space-y-2 mb-8 bg-gray-800 p-6 rounded-lg border border-gray-700 shadow"
         >
             <p><strong>Nom :</strong> {user.nom}</p>
             <p><strong>Email :</strong> {user.email}</p>
-            <p><strong>ID :</strong> {user.id}</p>
         </div>
 
         <form method="POST" class="flex flex-col gap-4 mb-12">
@@ -94,16 +88,6 @@ if (Astro.request.method === "POST") {
         </form>
 
         <h2 class="text-2xl font-semibold mb-4">Changer le mot de passe</h2>
-
-        {
-            message && (
-                <p
-                    class={`mb-6 ${message.startsWith("❌") ? "text-red-400" : "text-green-400"}`}
-                >
-                    {message}
-                </p>
-            )
-        }
 
         <form method="POST" class="space-y-4">
             <input type="hidden" name="action" value="changepass" />

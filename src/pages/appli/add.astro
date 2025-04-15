@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layoutappli.astro";
 import { addTemplate } from "../../../backend/backend.mjs";
+
+export const prerender = false;
+const locals = Astro.locals;
 let message = "";
 
 // Gestion du formulaire
@@ -8,17 +11,23 @@ if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
     const data = Object.fromEntries(formData.entries());
 
+    const user = locals.pb.authStore.model;
+
     if (!data.title || !data.url) {
-        message = "❌ Les champs sont requis.";
+        message = " Les champs sont requis.";
+    } else if (!user) {
+        message = " Vous devez être connecté pour ajouter un template.";
     } else {
+        data.auteur = user.nom; // 👈 nom en clair dans la base
         const result = await addTemplate(data);
         console.log("📤 Résultat du backend :", result);
         message = result.message;
     }
 }
 ---
-<Layout> 
- <div
+
+<Layout>
+    <div
         class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16"
     >
         <h2 class="text-2xl font-bold text-[#00C8E9] mb-6 text-center gap-8">

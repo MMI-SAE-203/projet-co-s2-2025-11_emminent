@@ -1,72 +1,138 @@
 ---
+// src/pages/appli/register.astro (première connexion simplifiée sans e-mail)
 import Layout from "../../layouts/Layoutappli.astro";
-
 export const prerender = false;
+
 const locals = Astro.locals;
+let message = "";
+let step = "start";
+let email = "";
 
 if (Astro.request.method === "POST") {
-    try {
-        const data = await Astro.request.formData();
-        const email = data.get("email") as string;
-        const password = data.get("password") as string;
-        const nom = data.get("nom") as string;
+    const form = await Astro.request.formData();
+    const mode = form.get("step");
+    email = form.get("email") as string;
 
-        await locals.pb.collection("users").create({
-            email,
-            password,
-            passwordConfirm: password,
-            nom,
-        });
+    if (mode === "start") {
+        try {
+            const user = await locals.pb
+                .collection("users")
+                .getFirstListItem(`email="${email}"`);
+            if (user) {
+                step = "setpass";
+            }
+        } catch (err) {
+            message = "Aucun compte trouvé pour cet e-mail.";
+        }
+    }
 
-        return Astro.redirect("/appli/profil");
-    } catch (e) {
-        console.error("Erreur d'inscription", e);
+    if (mode === "setpass") {
+        const password = form.get("password") as string;
+        const confirm = form.get("passwordConfirm") as string;
+
+        if (password !== confirm) {
+            message = "Les mots de passe ne correspondent pas.";
+            step = "setpass";
+        } else {
+            try {
+                const user = await locals.pb
+                    .collection("users")
+                    .getFirstListItem(`email="${email}"`);
+                await locals.pb.collection("users").update(user.id, {
+                    password,
+                    passwordConfirm: password,
+                });
+                message =
+                    "Mot de passe enregistré avec succès. Vous pouvez maintenant vous connecter.";
+                step = "done";
+            } catch (err) {
+                message = "Une erreur est survenue.";
+                step = "setpass";
+                console.error(err);
+            }
+        }
     }
 }
 ---
 
-<Layout pageTitle="Inscription">
-    <main class="max-w-lg mx-auto py-12 text-amber-50">
-        <h1 class="text-4xl font-bold mb-6">Créer un compte</h1>
-        <form action="" method="post" class="grid gap-4">
-            <label class="flex flex-col">
-                Nom
-                <input
-                    type="text"
-                    name="nom"
-                    required
-                    class="border px-3 py-2 rounded"
-                />
-            </label>
-            <label class="flex flex-col">
-                Adresse e-mail
-                <input
-                    type="email"
-                    name="email"
-                    required
-                    class="border px-3 py-2 rounded"
-                />
-            </label>
-            <label class="flex flex-col">
-                Mot de passe
-                <input
-                    type="password"
-                    name="password"
-                    required
-                    class="border px-3 py-2 rounded"
-                />
-            </label>
-            <input
-                class="bg-green-600 text-white rounded-lg px-4 py-2 cursor-pointer"
-                type="submit"
-                value="S'inscrire"
-            />
-        </form>
-        <p class="mt-4">
-            Déjà un compte ?
-            <a href="/appli/login" class="text-blue-600 underline"
-                >Se connecter</a
-            >
-        </p>
+<Layout pageTitle="Première connexion">
+    <main class="max-w-md mx-auto py-16 text-white">
+        <h1 class="text-4xl font-bold mb-6 text-center">Première connexion</h1>
+
+        {message && <p class="text-red-400 text-center mb-4">{message}</p>}
+
+        {
+            step === "start" && (
+                <form method="POST" class="space-y-6">
+                    <input type="hidden" name="step" value="start" />
+
+                    <label class="block">
+                        <span class="block mb-1">
+                            Adresse e-mail universitaire
+                        </span>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                        />
+                    </label>
+
+                    <input
+                        type="submit"
+                        value="Suivant"
+                        class="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-2 rounded cursor-pointer"
+                    />
+                </form>
+            )
+        }
+
+        {
+            step === "setpass" && (
+                <form method="POST" class="space-y-6">
+                    <input type="hidden" name="step" value="setpass" />
+                    <input type="hidden" name="email" value={email} />
+
+                    <label class="block">
+                        <span class="block mb-1">Nouveau mot de passe</span>
+                        <input
+                            type="password"
+                            name="password"
+                            required
+                            class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                        />
+                    </label>
+
+                    <label class="block">
+                        <span class="block mb-1">
+                            Confirmer le mot de passe
+                        </span>
+                        <input
+                            type="password"
+                            name="passwordConfirm"
+                            required
+                            class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+                        />
+                    </label>
+
+                    <input
+                        type="submit"
+                        value="Créer mon mot de passe"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded cursor-pointer"
+                    />
+                </form>
+            )
+        }
+
+        {
+            step === "done" && (
+                <div class="text-center text-green-400">
+                    <p>{message}</p>
+                    <a href="/appli/login" class="underline text-blue-400">
+                        Aller à la connexion
+                    </a>
+                </div>
+            )
+        }
     </main>
 </Layout>

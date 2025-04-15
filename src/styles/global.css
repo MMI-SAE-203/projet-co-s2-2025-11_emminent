@@ -22,7 +22,7 @@
    }
 
    a {
-       @apply hover:text-[#001733] font-sans;
+       @apply  font-sans;
    }
 
    p {

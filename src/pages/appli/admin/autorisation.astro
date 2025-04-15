@@ -1,0 +1,100 @@
+---
+// src/pages/admin/autorisation.astro
+import Layout from "../../../layouts/Layoutappli.astro";
+export const prerender = false;
+
+const locals = Astro.locals;
+let message = "";
+let emails = [];
+
+// ✅ Restriction aux superadmins PocketBase (mis à jour selon le message d’erreur)
+if (!locals.pb.authStore.isSuperuser) {
+    return Astro.redirect("/appli/login");
+}
+
+if (Astro.request.method === "POST") {
+    try {
+        const form = await Astro.request.formData();
+        const newEmailsRaw = form.get("emails") as string;
+        const newEmails = newEmailsRaw
+            .split(/[\s,;]+/)
+            .map((e) => e.trim().toLowerCase())
+            .filter(Boolean);
+
+        for (const email of newEmails) {
+            try {
+                const password = crypto.randomUUID();
+
+                // 🧠 Extraire le nom depuis l’email (ex: prenom.nom@...)
+                const [nomBrut] = email.split("@");
+                const [prenom, nom] = nomBrut.split(".");
+                const nomComplet = `${prenom?.charAt(0).toUpperCase() + prenom?.slice(1)} ${nom?.toUpperCase()}`;
+
+                await locals.pb.collection("users").create({
+                    email,
+                    password,
+                    passwordConfirm: password,
+                    nom: nomComplet || "Importé",
+                });
+                console.log("✅ Créé :", email);
+            } catch (err) {
+                console.error("❌ Erreur à la création de :", email);
+                console.error(err?.response || err);
+            }
+        }
+        message = "Importation terminée.";
+    } catch (e) {
+        message = "Erreur pendant l'import.";
+        console.error(e);
+    }
+}
+
+try {
+    const list = await locals.pb.collection("users").getFullList({
+        sort: "-created",
+    });
+    emails = list.map((u) => u.email);
+} catch (e) {
+    console.error("Erreur de récupération des emails utilisateurs", e);
+}
+---
+
+<Layout pageTitle="Gestion des autorisations">
+    <main class="max-w-2xl mx-auto py-12 text-white">
+        <h1 class="text-4xl font-bold mb-6">
+            Importation des e-mails autorisés
+        </h1>
+
+        {message && <p class="text-green-400 mb-4">{message}</p>}
+
+        <form method="POST" class="space-y-4">
+            <label class="block">
+                <span class="block mb-1">
+                    Collez une liste d'adresses e-mail séparées par des
+                    virgules, espaces ou retours à la ligne :
+                </span>
+                <textarea
+                    name="emails"
+                    rows="6"
+                    required
+                    class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded text-white"
+                ></textarea>
+            </label>
+
+            <input
+                type="submit"
+                value="Importer"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded cursor-pointer"
+            />
+        </form>
+
+        <hr class="my-8 border-gray-600" />
+
+        <h2 class="text-2xl font-semibold mb-4">
+            Liste actuelle des e-mails autorisés
+        </h2>
+        <ul class="list-disc list-inside space-y-1 text-sm">
+            {emails.map((email) => <li>{email}</li>)}
+        </ul>
+    </main>
+</Layout>
