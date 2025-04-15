@@ -1,6 +1,6 @@
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('https://emminent.noahrognon.fr:443');
 
 export async function getTemplates() {
     const records = await pb.collection('Templates').getFullList();
@@ -15,7 +15,7 @@ export async function addTemplate(data) {
         await pb.collection("Templates").create({
             title: data.title,
             url: data.url,
-            auteur: data.auteur // 👈 ici on envoie le nom de l'utilisateur
+            auteur: data.auteur 
         });
 
         return {
@@ -77,4 +77,66 @@ export async function votePrompt(promptId, type = "like") {
     } catch (error) {
         return { success: false, message: error.message };
     }
+}
+
+import 'dotenv/config';
+
+export async function askGPTWithHistory(conversationId, question) {
+    const history = await getMessages(conversationId);
+
+    const messages = history.map(m => ({
+        role: m.role,
+        content: m.contenu
+    }));
+
+    messages.push({ role: "user", content: question });
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            model: "gpt-4-1106-preview",
+            messages
+        })
+    });
+
+    const data = await response.json();
+    const reponse = data.choices?.[0]?.message?.content || "Réponse vide.";
+    return reponse;
+}
+
+export async function saveConversation(userId, question, reponse) {
+    try {
+        await pb.collection("conversations").create({
+            user: userId,
+            question,
+            reponse
+        });
+    } catch (err) {
+        console.error("❌ Erreur sauvegarde historique :", err);
+    }
+}
+export async function createConversation(userId) {
+    const conv = await pb.collection("conversations").create({
+        user: userId
+    });
+    return conv.id;
+}
+
+export async function addMessage(conversationId, role, contenu) {
+    return await pb.collection("messages").create({
+        conversation: conversationId,
+        role,
+        contenu
+    });
+}
+
+export async function getMessages(conversationId) {
+    return await pb.collection("messages").getFullList({
+        filter: `conversation = "${conversationId}"`,
+        sort: "created"
+    });
 }

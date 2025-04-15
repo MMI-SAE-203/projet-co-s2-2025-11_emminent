@@ -3,7 +3,7 @@ import { defineMiddleware } from "astro/middleware";
 
 export const onRequest = defineMiddleware(
   async ({ locals, request, isPrerendered }, next: () => any) => {
-    locals.pb = new PocketBase("http://127.0.0.1:8090");
+    locals.pb = new PocketBase("https://emminent.noahrognon.fr:443");
 
     if (!isPrerendered) {
       locals.pb.authStore.loadFromCookie(request.headers.get("cookie") || "");

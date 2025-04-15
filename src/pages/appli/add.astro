@@ -18,7 +18,9 @@ if (Astro.request.method === "POST") {
     } else if (!user) {
         message = " Vous devez être connecté pour ajouter un template.";
     } else {
-        data.auteur = user.nom; // 👈 nom en clair dans la base
+        data.auteur = user.nom || user.email || "Anonyme";
+        console.log("🧠 Utilisateur connecté :", user);
+        console.log("📤 Données envoyées à PocketBase :", data);
         const result = await addTemplate(data);
         console.log("📤 Résultat du backend :", result);
         message = result.message;

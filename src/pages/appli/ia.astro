@@ -1,0 +1,253 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+import {
+    askGPTWithHistory,
+    saveConversation,
+    createConversation,
+    addMessage,
+    getMessages,
+} from "../../../backend/backend.mjs";
+
+export const prerender = false;
+const locals = Astro.locals;
+let message = "";
+let question = "";
+let reponse = "";
+
+const user = locals.pb.authStore.model;
+let conversationId = Astro.url.searchParams.get("conversation") || "";
+let contexte = Astro.url.searchParams.get("contexte") || "general";
+let nouveaux = Astro.url.searchParams.get("nouveau") || "";
+let historiques = [];
+let messages = [];
+
+const systemMessages = {
+    general: "Tu es une IA bienveillante spécialisée dans le BUT MMI.",
+    fiche: "Tu aides à synthétiser les cours du BUT MMI sous forme de fiches de révision.",
+    code: "Tu es un expert en développement web et outils numériques pour MMI.",
+    design: "Tu es un designer graphique et UI spécialisé en projets étudiants MMI.",
+    communication:
+        "Tu es un stratège en communication dans le cadre du BUT MMI.",
+};
+
+if (user) {
+    historiques = await locals.pb.collection("conversations").getFullList({
+        filter: `user = "${user.id}"`,
+        sort: "-created",
+    });
+
+    if (nouveaux === "oui") {
+        conversationId = await createConversation(user.id);
+    } else if (!conversationId && historiques.length > 0) {
+        conversationId = historiques[0].id;
+    }
+
+    if (conversationId) {
+        messages = await getMessages(conversationId);
+    }
+}
+
+if (Astro.request.method === "POST") {
+    const form = await Astro.request.formData();
+    question = form.get("question") || "";
+    const currentConv = form.get("conversationId");
+    contexte = form.get("contexte") || "general";
+
+    if (!question.trim()) {
+        message = "Merci de formuler une question.";
+    } else {
+        if (!currentConv && user) {
+            conversationId = await createConversation(user.id);
+        } else {
+            conversationId = currentConv;
+        }
+
+        await addMessage(conversationId, "user", question);
+        reponse = await askGPTWithHistory(
+            conversationId,
+            question,
+            systemMessages[contexte],
+        );
+        await addMessage(conversationId, "assistant", reponse);
+        messages = await getMessages(conversationId);
+    }
+}
+---
+
+<Layout>
+    <main
+        class="min-h-screen bg-[#01112F] text-white grid grid-cols-1 lg:grid-cols-5"
+    >
+        <!-- Historique -->
+        <aside
+            class="hidden lg:block col-span-1 border-r border-[#52289D] p-4 overflow-y-auto"
+        >
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">🕘 Historique</h2>
+                <a
+                    href="/appli/ia?nouveau=oui"
+                    class="text-sm text-blue-400 hover:underline">➕ Nouveau</a
+                >
+            </div>
+            <ul class="space-y-2 text-sm">
+                {
+                    historiques.map((conv) => (
+                        <li class="bg-[#0C1B3A] p-2 rounded">
+                            <div class="flex justify-between items-center">
+                                <a
+                                    href={`/appli/ia?conversation=${conv.id}`}
+                                    class="text-white line-clamp-2"
+                                >
+                                    {conv.titre ||
+                                        `Conversation ${conv.id.slice(0, 6)}`}
+                                </a>
+                                <form
+                                    method="POST"
+                                    action={`/appli/api/delete-conversation`}
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="id"
+                                        value={conv.id}
+                                    />
+                                    <button
+                                        type="submit"
+                                        class="text-red-400 text-xs ml-2"
+                                    >
+                                        🗑
+                                    </button>
+                                </form>
+                            </div>
+
+                            <details class="mt-1">
+                                <summary class="cursor-pointer text-xs text-blue-300">
+                                    ✏️ Renommer
+                                </summary>
+                                <form
+                                    method="POST"
+                                    action="/appli/api/rename-conversation"
+                                    class="mt-2 flex gap-1"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="id"
+                                        value={conv.id}
+                                    />
+                                    <input
+                                        type="text"
+                                        name="titre"
+                                        placeholder="Nouveau titre"
+                                        class="flex-grow text-sm px-2 py-1 rounded bg-[#1e3a5f] text-white border border-[#333]"
+                                        required
+                                    />
+                                    <button
+                                        type="submit"
+                                        class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
+                                    >
+                                        ✅
+                                    </button>
+                                </form>
+                            </details>
+                        </li>
+                    ))
+                }
+            </ul>
+        </aside>
+
+        <!-- Chat principal -->
+        <section class="col-span-1 lg:col-span-4 px-4 py-12">
+            <div class="max-w-2xl mx-auto text-center">
+                <img
+                    src="../../../src/assets/icons/Logo.svg"
+                    alt="Emminent"
+                    class="mx-auto mb-12 w-64"
+                />
+
+                <form
+                    method="POST"
+                    class="bg-white text-black rounded-xl px-6 py-4 shadow-md"
+                >
+                    <input
+                        type="hidden"
+                        name="conversationId"
+                        value={conversationId}
+                    />
+                    <input type="hidden" name="contexte" value={contexte} />
+
+                    <p class="mb-4 font-medium !text-gray-800">
+                        Un doute sur un cours MMI ? Demande, et laisse l'IA
+                        t'éclairer.
+                    </p>
+                    <div class="flex items-center gap-2 mb-3">
+                        <input
+                            type="text"
+                            name="question"
+                            value={question}
+                            placeholder="Pose ta question ici..."
+                            class="flex-grow px-4 py-2 rounded-full bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#52289D]"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            class="bg-[#52289D] hover:bg-[#3f1b80] text-white font-bold p-2 rounded-full"
+                        >
+                            ➤
+                        </button>
+                    </div>
+                    <div class="flex gap-2 flex-wrap justify-center">
+                        <a
+                            href="?contexte=fiche"
+                            class={`text-xs px-3 py-1 rounded-full border ${contexte === "fiche" ? "bg-[#00C8E9] text-black" : "bg-[#01112F] text-white border-white"}`}
+                            >Fiche de révision</a
+                        >
+                        <a
+                            href="?contexte=code"
+                            class={`text-xs px-3 py-1 rounded-full border ${contexte === "code" ? "bg-[#00C8E9] text-black" : "bg-[#01112F] text-white border-white"}`}
+                            >Code</a
+                        >
+                        <a
+                            href="?contexte=design"
+                            class={`text-xs px-3 py-1 rounded-full border ${contexte === "design" ? "bg-[#00C8E9] text-black" : "bg-[#01112F] text-white border-white"}`}
+                            >Design</a
+                        >
+                        <a
+                            href="?contexte=communication"
+                            class={`text-xs px-3 py-1 rounded-full border ${contexte === "communication" ? "bg-[#00C8E9] text-black" : "bg-[#01112F] text-white border-white"}`}
+                            >Communication</a
+                        >
+                        <a
+                            href="?contexte=general"
+                            class={`text-xs px-3 py-1 rounded-full border ${contexte === "general" ? "bg-[#00C8E9] text-black" : "bg-[#01112F] text-white border-white"}`}
+                            >Général</a
+                        >
+                    </div>
+                </form>
+
+                {message && <p class="mt-6 text-red-400">{message}</p>}
+
+                {
+                    messages.length > 0 && (
+                        <div
+                            id="chat"
+                            class="mt-10 space-y-4 text-left max-h-[60vh] overflow-y-auto"
+                        >
+                            {messages.map((msg) => (
+                                <div
+                                    class={`p-4 rounded-xl ${msg.role === "user" ? "bg-[#162C52] text-white text-right" : "bg-[#0C1B3A] text-[#00C8E9] text-left"}`}
+                                >
+                                    <p class="whitespace-pre-line">
+                                        {msg.contenu}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                }
+            </div>
+        </section>
+    </main>
+    <script>
+        const chat = document.getElementById("chat");
+        if (chat) chat.scrollTop = chat.scrollHeight;
+    </script>
+</Layout>

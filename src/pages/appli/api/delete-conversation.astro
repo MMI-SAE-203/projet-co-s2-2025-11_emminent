@@ -1,0 +1,17 @@
+---
+const locals = Astro.locals;
+
+if (Astro.request.method === "POST") {
+    const form = await Astro.request.formData();
+    const id = form.get("id");
+
+    try {
+        await locals.pb.collection("conversations").delete(id);
+        return Astro.redirect("/appli/ia");
+    } catch (err) {
+        console.error("Erreur suppression conversation", err);
+        return new Response("Erreur suppression", { status: 500 });
+    }
+}
+return new Response("Méthode non autorisée", { status: 405 });
+---

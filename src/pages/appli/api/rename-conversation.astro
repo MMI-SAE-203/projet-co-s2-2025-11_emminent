@@ -1,0 +1,18 @@
+---
+const locals = Astro.locals;
+
+if (Astro.request.method === "POST") {
+    const form = await Astro.request.formData();
+    const id = form.get("id");
+    const titre = form.get("titre");
+
+    try {
+        await locals.pb.collection("conversations").update(id, { titre });
+        return Astro.redirect(`/appli/ia?conversation=${id}`);
+    } catch (err) {
+        console.error("Erreur renommage conversation", err);
+        return new Response("Erreur renommage", { status: 500 });
+    }
+}
+return new Response("Méthode non autorisée", { status: 405 });
+---
