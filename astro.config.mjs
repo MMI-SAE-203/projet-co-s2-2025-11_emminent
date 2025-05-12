@@ -1,19 +1,15 @@
-// @ts-check
+// astro.config.mjs
+
+
 import { defineConfig } from 'astro/config';
-
 import tailwindcss from '@tailwindcss/vite';
-
 import alpinejs from '@astrojs/alpinejs';
 
-// https://astro.build/config
 export default defineConfig({
   experimental: { svg: true },
-
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
-
   integrations: [alpinejs()],
-
   output: "server"
 });

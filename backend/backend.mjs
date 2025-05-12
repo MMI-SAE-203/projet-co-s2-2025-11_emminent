@@ -15,7 +15,7 @@ export async function addTemplate(data) {
         await pb.collection("Templates").create({
             title: data.title,
             url: data.url,
-            auteur: data.auteur 
+            auteur: data.auteur
         });
 
         return {
@@ -81,15 +81,41 @@ export async function votePrompt(promptId, type = "like") {
 
 import 'dotenv/config';
 
-export async function askGPTWithHistory(conversationId, question) {
+import fs from "fs/promises";
+import pdfParse from "pdf-parse";
+
+export async function askGPTWithHistory(conversationId, question, systemPrompt, pdfFile = null) {
     const history = await getMessages(conversationId);
 
-    const messages = history.map(m => ({
-        role: m.role,
-        content: m.contenu
-    }));
+    let pdfContext = "";
+    if (pdfFile) {
+        try {
+            const buffer = await fs.readFile(pdfFile);
+            const parsed = await pdfParse(buffer);
+            pdfContext = parsed.text.slice(0, 3000); // pour éviter les prompts trop longs
+        } catch (err) {
+            console.error("❌ Erreur de lecture PDF :", err.message);
+        }
+    }
 
-    messages.push({ role: "user", content: question });
+    // 🔍 Recherche de documents RAG (seulement si pas de PDF)
+    let docContext = "";
+    if (!pdfContext) {
+        const docs = await matchDocuments(question);
+        docContext = docs.map(d => d.contenu).join("\n\n");
+    }
+
+    // 🧠 Prompt enrichi
+    const enhancedPrompt = `${systemPrompt}
+    
+${pdfContext ? `Voici un document que l'utilisateur a joint :\n${pdfContext}` : ""}
+${docContext ? `Voici des documents de référence MMI utiles :\n${docContext}` : ""}`.trim();
+
+    const messages = [
+        { role: "system", content: enhancedPrompt },
+        ...history.map(m => ({ role: m.role, content: m.contenu })),
+        { role: "user", content: question }
+    ];
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -104,9 +130,17 @@ export async function askGPTWithHistory(conversationId, question) {
     });
 
     const data = await response.json();
-    const reponse = data.choices?.[0]?.message?.content || "Réponse vide.";
-    return reponse;
+
+    if (data.error) {
+        console.error("❌ Erreur GPT :", data.error);
+        return `Erreur : ${data.error.message}`;
+    }
+
+    return data.choices?.[0]?.message?.content || "Réponse vide.";
 }
+
+
+
 
 export async function saveConversation(userId, question, reponse) {
     try {
@@ -139,4 +173,57 @@ export async function getMessages(conversationId) {
         filter: `conversation = "${conversationId}"`,
         sort: "created"
     });
+}
+// backend.mjs
+import OpenAI from "openai";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export async function searchRelevantChunks(question) {
+    const embedding = await openai.embeddings.create({
+        model: "text-embedding-3-small",
+        input: question,
+    });
+
+    const queryEmbedding = embedding.data[0].embedding;
+
+    const { data, error } = await supabase.rpc("match_documents", {
+        query_embedding: queryEmbedding,
+        match_count: 5
+    });
+
+    if (error) {
+        console.error("Erreur Supabase RAG :", error);
+        return "";
+    }
+
+    return data.map(d => d.contenu).join("\n\n");
+}
+export async function matchDocuments(question) {
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    // 1. Obtenir l'embedding de la question
+    const embeddingResponse = await openai.embeddings.create({
+        model: "text-embedding-3-small",
+        input: question
+    });
+
+    const questionEmbedding = embeddingResponse.data[0].embedding;
+
+    // 2. Appel RPC vers Supabase pour récupérer les chunks proches
+    const { data, error } = await supabase.rpc("match_documents", {
+        query_embedding: questionEmbedding,
+        match_threshold: 0.78,
+        match_count: 5
+    });
+
+    if (error) {
+        console.error("❌ Erreur de recherche Supabase:", error.message);
+        return [];
+    }
+
+    return data;
 }

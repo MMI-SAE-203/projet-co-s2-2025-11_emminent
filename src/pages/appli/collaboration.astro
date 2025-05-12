@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layoutappli.astro";
 import { getTemplates, addTemplate } from "../../../backend/backend.mjs";
+import Button from "../../components/Button.astro";
 
 let message = "";
 
@@ -59,7 +60,7 @@ const templatesWithThumbnails = await Promise.all(
                         class="w-full max-w-md h-64 object-cover rounded-lg shadow-lg mx-auto"
                         alt="Aperçu du template"
                     />
-
+                
                     <div class="mt-4">
                         <a
                             x-bind:href="templates[index].url"
@@ -96,10 +97,10 @@ const templatesWithThumbnails = await Promise.all(
 
     <!-- Formulaire AJOUT (hors de AlpineJS !) -->
     <div
-        class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16"
+        class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16 m-8"
     >
         <h2 class="text-2xl font-bold text-[#00C8E9] mb-6 text-center gap-8">
-            ➕ Ajouter un Template 
+            ➕ Ajouter un Template
         </h2>
 
         {

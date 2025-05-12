@@ -1,51 +1,95 @@
 ---
-// src/pages/admin/autorisation.astro
 import Layout from "../../../layouts/Layoutappli.astro";
+import { createClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
+import pdfParse from "pdf-parse";
+import crypto from "crypto";
+
 export const prerender = false;
 
 const locals = Astro.locals;
 let message = "";
 let emails = [];
 
-// ✅ Restriction aux superadmins PocketBase (mis à jour selon le message d’erreur)
 if (!locals.pb.authStore.isSuperuser) {
     return Astro.redirect("/appli/login");
 }
 
 if (Astro.request.method === "POST") {
-    try {
-        const form = await Astro.request.formData();
-        const newEmailsRaw = form.get("emails") as string;
-        const newEmails = newEmailsRaw
-            .split(/[\s,;]+/)
-            .map((e) => e.trim().toLowerCase())
-            .filter(Boolean);
+    const form = await Astro.request.formData();
 
-        for (const email of newEmails) {
-            try {
-                const password = crypto.randomUUID();
+    // 📄 PDF UPLOAD
+    if (form.has("upload_pdf")) {
+        try {
+            const file = form.get("pdf");
+            const arrayBuffer = await file.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            const data = await pdfParse(buffer);
+            const text = data.text;
 
-                // 🧠 Extraire le nom depuis l’email (ex: prenom.nom@...)
-                const [nomBrut] = email.split("@");
-                const [prenom, nom] = nomBrut.split(".");
-                const nomComplet = `${prenom?.charAt(0).toUpperCase() + prenom?.slice(1)} ${nom?.toUpperCase()}`;
+            const chunks = text.match(/(.|\s){1,500}/g) || [];
 
-                await locals.pb.collection("users").create({
-                    email,
-                    password,
-                    passwordConfirm: password,
-                    nom: nomComplet || "Importé",
+            const supabase = createClient(
+                import.meta.env.SUPABASE_URL,
+                import.meta.env.SUPABASE_KEY,
+            );
+            const openai = new OpenAI({
+                apiKey: import.meta.env.OPENAI_API_KEY,
+            });
+
+            for (const chunk of chunks) {
+                const embeddingResponse = await openai.embeddings.create({
+                    model: "text-embedding-3-small",
+                    input: chunk,
                 });
-                console.log("✅ Créé :", email);
-            } catch (err) {
-                console.error("❌ Erreur à la création de :", email);
-                console.error(err?.response || err);
+                const embedding = embeddingResponse.data[0].embedding;
+
+                await supabase.from("documents").insert({
+                    contenu: chunk,
+                    source: file.name,
+                    embedding,
+                });
             }
+
+            message = "✅ PDF indexé avec succès.";
+        } catch (err) {
+            console.error("❌ Erreur PDF :", err);
+            message = "❌ Erreur lors de l'indexation du PDF.";
         }
-        message = "Importation terminée.";
-    } catch (e) {
-        message = "Erreur pendant l'import.";
-        console.error(e);
+    }
+
+    // 📧 EMAIL IMPORT
+    else if (form.has("emails")) {
+        try {
+            const newEmailsRaw = form.get("emails");
+            const newEmails = newEmailsRaw
+                .split(/[,\\s;]+/)
+                .map((e) => e.trim().toLowerCase())
+                .filter(Boolean);
+
+            for (const email of newEmails) {
+                try {
+                    const password = crypto.randomUUID();
+                    const [nomBrut] = email.split("@");
+                    const [prenom, nom] = nomBrut.split(".");
+                    const nomComplet = `${prenom?.charAt(0).toUpperCase() + prenom?.slice(1)} ${nom?.toUpperCase()}`;
+
+                    await locals.pb.collection("users").create({
+                        email,
+                        password,
+                        passwordConfirm: password,
+                        nom: nomComplet || "Importé",
+                    });
+                } catch (err) {
+                    console.error("Erreur création utilisateur :", email, err);
+                }
+            }
+
+            message = "✅ Importation terminée.";
+        } catch (e) {
+            message = "❌ Erreur pendant l'import.";
+            console.error(e);
+        }
     }
 }
 
@@ -96,5 +140,32 @@ try {
         <ul class="list-disc list-inside space-y-1 text-sm">
             {emails.map((email) => <li>{email}</li>)}
         </ul>
+        <hr class="my-12 border-gray-600" />
+
+        <h2 class="text-2xl font-semibold mb-4 text-white">
+            Uploader un document PDF pour le RAG
+        </h2>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            <label class="block">
+                <span class="block mb-1 text-white"
+                    >Sélectionnez un fichier PDF :</span
+                >
+                <input
+                    type="file"
+                    name="pdf"
+                    accept="application/pdf"
+                    required
+                    class="w-full text-white bg-gray-800 border border-gray-600 rounded px-4 py-2"
+                />
+            </label>
+
+            <input
+                type="submit"
+                name="upload_pdf"
+                value="Uploader et indexer"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer"
+            />
+        </form>
     </main>
 </Layout>
