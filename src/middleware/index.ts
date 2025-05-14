@@ -9,8 +9,8 @@ export const onRequest = defineMiddleware(
       locals.pb.authStore.loadFromCookie(request.headers.get("cookie") || "");
 
       try {
-        if (locals.pb.authStore.isAdmin) {
-          // refresh admin session
+        if (locals.pb.authStore.isSuperuser) {
+          // refresh superadmin session (nouveau nom)
           await locals.pb.admins.authRefresh();
         } else if (locals.pb.authStore.isValid) {
           // refresh user session

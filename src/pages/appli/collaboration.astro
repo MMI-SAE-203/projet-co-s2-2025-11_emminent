@@ -1,6 +1,10 @@
 ---
 import Layout from "../../layouts/Layoutappli.astro";
-import { getTemplates, addTemplate } from "../../../backend/backend.mjs";
+import {
+    getTemplates,
+    getDossiers,
+    addTemplate,
+} from "../../../backend/backend.mjs";
 import Button from "../../components/Button.astro";
 
 let message = "";
@@ -36,12 +40,28 @@ const templatesWithThumbnails = await Promise.all(
         };
     }),
 );
+const dossiers = await getDossiers();
+const dossiersWithThumbnails = await Promise.all(
+    dossiers.map(async (d) => {
+        const res = await fetch(
+            `https://api.microlink.io?url=${encodeURIComponent(d.url)}`,
+        );
+        const json = await res.json();
+        return {
+            title: d.title,
+            url: d.url,
+            thumbnail:
+                json.data.image?.url ||
+                "https://via.placeholder.com/600x400?text=Pas+de+visuel",
+        };
+    }),
+);
 ---
 
 <Layout>
     <div class="max-w-3xl mx-auto py-10">
         <h1 class="text-3xl font-bold mb-6 text-center">
-            Galerie de templates
+            Galerie de templates de présentation
         </h1>
 
         <!-- Galerie AlpineJS -->
@@ -60,7 +80,7 @@ const templatesWithThumbnails = await Promise.all(
                         class="w-full max-w-md h-64 object-cover rounded-lg shadow-lg mx-auto"
                         alt="Aperçu du template"
                     />
-                
+
                     <div class="mt-4">
                         <a
                             x-bind:href="templates[index].url"
@@ -96,47 +116,73 @@ const templatesWithThumbnails = await Promise.all(
     </div>
 
     <!-- Formulaire AJOUT (hors de AlpineJS !) -->
-    <div
-        class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16 m-8"
-    >
-        <h2 class="text-2xl font-bold text-[#00C8E9] mb-6 text-center gap-8">
-            ➕ Ajouter un Template
-        </h2>
-
-        {
-            message && (
-                <p class="mb-4 text-sm font-semibold text-[#00C8E9] text-center">
-                    {message}
-                </p>
-            )
-        }
-
-        <form
-            action="/appli/collaboration"
-            method="POST"
-            class="flex flex-col gap-4"
+    <div class="text-center mb-10">
+        <a
+            href="/appli/add"
+            class="bg-[#00C8E9] hover:bg-[#00AFC1] text-black font-bold px-6 py-3 rounded-full transition"
         >
-            <input
-                type="text"
-                name="title"
-                placeholder="Titre du template"
-                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
-                required
-            />
+            ➕ Ajouter un template
+        </a>
+    </div>
+    <div class="max-w-3xl mx-auto py-10 mt-20 border-t border-gray-500">
+        <h1 class="text-3xl font-bold mb-6 text-center">
+            Galerie de templates de dossier de présentation
+        </h1>
 
-            <input
-                type="url"
-                name="url"
-                placeholder="Lien "
-                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
-                required
-            />
+        <div
+            x-data={`{ dossiers: ${JSON.stringify(dossiersWithThumbnails)}, index: 0 }`}
+            class="flex flex-col items-center"
+        >
+            <template x-if="dossiers.length > 0">
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                        <span x-text="dossiers[index].title"></span>
+                    </h2>
 
-            <input
-                type="submit"
-                value="Ajouter"
-                class="bg-[#00C8E9] text-black font-bold py-3 rounded-full hover:bg-[#00AFC1] transition cursor-pointer"
-            />
-        </form>
+                    <img
+                        x-bind:src="dossiers[index].thumbnail"
+                        class="w-full max-w-md h-64 object-cover rounded-lg shadow-lg mx-auto"
+                        alt="Aperçu du dossier"
+                    />
+
+                    <div class="mt-4">
+                        <a
+                            x-bind:href="dossiers[index].url"
+                            target="_blank"
+                            class="text-blue-600 underline"
+                        >
+                            Voir le dossier
+                        </a>
+                    </div>
+
+                    <div class="flex gap-4 justify-center mt-6">
+                        <button
+                            @click="index = (index === 0 ? dossiers.length - 1 : index - 1)"
+                            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                        >
+                            Précédent
+                        </button>
+                        <button
+                            @click="index = (index === dossiers.length - 1 ? 0 : index + 1)"
+                            class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                        >
+                            Suivant
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="dossiers.length === 0">
+                <p class="text-gray-500 mt-4">Aucun dossier à afficher.</p>
+            </template>
+        </div>
+    </div>
+    <div class="text-center my-10">
+        <a
+            href="/appli/add-dossier"
+            class="bg-[#00C8E9] hover:bg-[#00AFC1] text-black font-bold px-6 py-3 rounded-full transition"
+        >
+            ➕ Ajouter un dossier de présentation
+        </a>
     </div>
 </Layout>

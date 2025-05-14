@@ -67,6 +67,22 @@ if (Astro.request.method === "POST") {
     const currentConv = form.get("conversationId")?.toString();
     contexte = form.get("contexte")?.toString() || "general";
 
+    const file = form.get("pdf");
+    let pdfPath = null;
+
+    if (file && typeof file === "object" && "arrayBuffer" in file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const fileName = `./temp/${Date.now()}-${file.name}`;
+        await import("fs/promises").then((fs) =>
+            fs.writeFile(fileName, buffer),
+        );
+        pdfPath = fileName;
+        console.log("✅ PDF reçu et enregistré :", fileName);
+    } else {
+        console.log("⛔ Aucun fichier PDF reçu.");
+    }
+
     if (!question.trim()) {
         message = "Merci de formuler une question.";
     } else {
@@ -82,9 +98,15 @@ if (Astro.request.method === "POST") {
             conversationId,
             question,
             systemMessages[contexte],
+            pdfPath, // 👈 on passe le fichier
         );
         await addMessage(conversationId, "assistant", reponse);
         messages = await getMessages(conversationId);
+
+        // Nettoyage temporaire (optionnel mais propre)
+        if (pdfPath) {
+            await import("fs/promises").then((fs) => fs.unlink(pdfPath));
+        }
     }
 }
 ---
@@ -186,6 +208,7 @@ if (Astro.request.method === "POST") {
                 <form
                     method="POST"
                     class="bg-white text-black rounded-xl px-6 py-4 shadow-md mb-4"
+                    enctype="multipart/form-data"
                 >
                     <input
                         type="hidden"

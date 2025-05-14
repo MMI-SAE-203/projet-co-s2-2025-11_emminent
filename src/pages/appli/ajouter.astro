@@ -4,18 +4,23 @@ import { addPrompt } from "../../../backend/backend.mjs";
 
 let message = "";
 
+const user = Astro.locals.pb.authStore.model;
+
 if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
     const data = Object.fromEntries(formData.entries());
 
-    if (!data.contenu || !data.domaine || !data.theme) {
+    if (!user) {
+        message = "❌ Vous devez être connecté pour ajouter un prompt.";
+    } else if (!data.contenu || !data.domaine || !data.theme) {
         message = "❌ Tous les champs sont obligatoires.";
     } else {
-        const result = await addPrompt(data);
+        const result = await addPrompt(data, user.id); // 👈 on transmet l'ID utilisateur
         message = result.message;
     }
 }
 ---
+
 
 <Layout>
     <div

@@ -1,0 +1,72 @@
+---
+import Layout from "../../layouts/Layoutappli.astro";
+import { addDossier } from "../../../backend/backend.mjs";
+
+let message = "";
+const user = Astro.locals.pb.authStore.model;
+
+if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const data = Object.fromEntries(formData.entries());
+
+    if (!user) {
+        message = "❌ Vous devez être connecté pour ajouter un dossier.";
+    } else if (!data.title || !data.url) {
+        message = "❌ Tous les champs sont requis.";
+    } else {
+        const result = await addDossier(data, user.id);
+        message = result.message;
+    }
+}
+---
+
+<Layout>
+    <div
+        class="max-w-2xl mx-auto px-6 py-10 bg-[#1E1B3A] rounded-xl shadow-lg mt-16 m-8"
+    >
+        <h2 class="text-3xl font-bold text-[#00C8E9] mb-6 text-center">
+            ➕ Ajouter un dossier de présentation
+        </h2>
+
+        {
+            message && (
+                <p class="mb-4 text-sm font-semibold text-[#00C8E9] text-center">
+                    {message}
+                </p>
+            )
+        }
+
+        <form method="POST" class="flex flex-col gap-4">
+            <input
+                type="text"
+                name="title"
+                placeholder="Titre du dossier"
+                required
+                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
+            />
+
+            <input
+                type="url"
+                name="url"
+                placeholder="Lien du dossier (Google Drive, PDF, site...)"
+                required
+                class="bg-white/10 text-white placeholder-gray-300 border border-[#6B46C1] px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00C8E9] transition"
+            />
+
+            <input
+                type="submit"
+                value="Ajouter le dossier"
+                class="bg-[#00C8E9] text-black font-bold py-3 rounded-full hover:bg-[#00AFC1] transition cursor-pointer"
+            />
+        </form>
+
+        <div class="text-center mt-6">
+            <a
+                href="/appli/collaboration"
+                class="text-sm text-[#00C8E9] hover:underline"
+            >
+                ← Retour à la galerie
+            </a>
+        </div>
+    </div>
+</Layout>

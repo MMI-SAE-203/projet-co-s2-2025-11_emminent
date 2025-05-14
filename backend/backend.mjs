@@ -8,28 +8,28 @@ export async function getTemplates() {
 }
 
 
-export async function addTemplate(data) {
+export async function addTemplate(data, userId) {
     try {
-        console.log("📤 Données envoyées à PocketBase :", data);
+        console.log("📤 Ajout template :", data, "👤 Auteur :", userId);
 
         await pb.collection("Templates").create({
-            title: data.title,
-            url: data.url,
-            auteur: data.auteur
+            ...data,
+            author: userId, // ✅ relation identique à celle utilisée pour les prompts
         });
 
         return {
             success: true,
-            message: "Le template a été ajouté avec succès.",
+            message: "✅ Le template a été ajouté avec succès.",
         };
     } catch (error) {
-        console.error(" Erreur PocketBase :", error);
+        console.error("❌ Erreur lors de l'ajout du template :", error);
         return {
             success: false,
-            message: " Une erreur est survenue : " + error.message,
+            message: "❌ Erreur : " + error.message,
         };
     }
 }
+
 
 
 // Fonction backend PocketBase
@@ -39,10 +39,15 @@ export async function getPrompts() {
     });
     return records;
 }
-export async function addPrompt(data) {
+export async function addPrompt(data, userId) {
     try {
-        console.log("📝 Ajout prompt :", data);
-        await pb.collection("prompts").create(data);
+        console.log("📝 Ajout prompt :", data, "👤 Auteur :", userId);
+
+        await pb.collection("prompts").create({
+            ...data,
+            author: userId, // 👈 relation vers l'utilisateur connecté
+        });
+
         return {
             success: true,
             message: "✅ Le prompt a été ajouté avec succès.",
@@ -55,6 +60,7 @@ export async function addPrompt(data) {
         };
     }
 }
+
 
 export async function votePrompt(promptId, type = "like") {
     try {
@@ -92,7 +98,9 @@ export async function askGPTWithHistory(conversationId, question, systemPrompt, 
         try {
             const buffer = await fs.readFile(pdfFile);
             const parsed = await pdfParse(buffer);
-            pdfContext = parsed.text.slice(0, 3000); // pour éviter les prompts trop longs
+            pdfContext = parsed.text.slice(0, 5000); // pour éviter les prompts trop longs
+            console.log("📄 CONTENU DU PDF LU :", pdfContext.slice(0, 500));
+
         } catch (err) {
             console.error("❌ Erreur de lecture PDF :", err.message);
         }
@@ -107,9 +115,16 @@ export async function askGPTWithHistory(conversationId, question, systemPrompt, 
 
     // 🧠 Prompt enrichi
     const enhancedPrompt = `${systemPrompt}
+
+${pdfContext
+            ? `L'utilisateur a joint un document PDF. Voici son contenu. Tu dois absolument en tenir compte pour répondre à sa question :\n"""${pdfContext}"""`
+            : "[Aucun contenu de PDF lisible ou fourni.]"}
+
+${docContext
+            ? `Voici des documents de référence MMI utiles :\n${docContext}`
+            : ""}`.trim();
+
     
-${pdfContext ? `Voici un document que l'utilisateur a joint :\n${pdfContext}` : ""}
-${docContext ? `Voici des documents de référence MMI utiles :\n${docContext}` : ""}`.trim();
 
     const messages = [
         { role: "system", content: enhancedPrompt },
@@ -226,4 +241,31 @@ export async function matchDocuments(question) {
     }
 
     return data;
+}
+
+export async function getDossiers() {
+    const records = await pb.collection('Dossier').getFullList();
+    return records;
+}
+
+export async function addDossier(data, userId) {
+    try {
+        console.log("📤 Ajout dossier :", data, "👤 Auteur :", userId);
+
+        await pb.collection("Dossier").create({
+            ...data,
+            author: userId,
+        });
+
+        return {
+            success: true,
+            message: "✅ Le dossier a été ajouté avec succès.",
+        };
+    } catch (error) {
+        console.error("❌ Erreur lors de l'ajout du dossier :", error);
+        return {
+            success: false,
+            message: "❌ Erreur : " + error.message,
+        };
+    }
 }
