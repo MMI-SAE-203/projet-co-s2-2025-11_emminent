@@ -6,7 +6,10 @@ import alpinejs from '@astrojs/alpinejs';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  experimental: { svg: true },
+  experimental: {
+    svg: true,
+    session: true, // ✅ ajoute ceci
+  },
   output: 'server',
   adapter: netlify(),
   vite: {
