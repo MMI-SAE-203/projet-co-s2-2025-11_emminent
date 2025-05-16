@@ -1,6 +1,6 @@
 ---
 import Logo from "../assets/icons/Logo.svg";
-import Logomobile from "../assets/icons/Logomobile.svg";
+import Logomobile from "../../public/Logomobile.svg";
 const currentPath = Astro.url.pathname;
 import Utilisateur from "../assets/icons/Utilisateurs.svg";
 
@@ -40,11 +40,8 @@ const locals = Astro.locals;
         <a href="/appli/ia" class="hover:text-[#001733]">IA</a>
         <a href="/appli/prompts" class="hover:text-[#001733]">Prompts</a>
         <a href="/appli" class="hover:text-[#001733]">Emminent</a>
-        <a href="/appli/outils" class="hover:text-[#001733]"
-            >Quels outils ?</a
-        >
-        <a href="/appli/collaboration" class="hover:text-[#001733]"
-            >Templates</a
+        <a href="/appli/outils" class="hover:text-[#001733]">Quels outils ?</a>
+        <a href="/appli/collaboration" class="hover:text-[#001733]">Templates</a
         >
         <a href="/appli/contact" class="hover:text-[#001733]">Contact</a>
         {

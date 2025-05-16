@@ -238,7 +238,7 @@ export async function matchDocuments(question) {
     if (error) {
         console.error("❌ Erreur de recherche Supabase:", error.message);
         return [];
-    }
+    }   
 
     return data;
 }
