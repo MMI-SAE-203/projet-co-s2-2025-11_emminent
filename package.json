@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.5",
-    "@astrojs/netlify": "^6.3.3",
+    "@astrojs/netlify": "^6.3.4",
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/vite": "^4.0.16",
     "@types/alpinejs": "^3.13.11",

@@ -8,7 +8,7 @@ import netlify from '@astrojs/netlify';
 export default defineConfig({
   experimental: {
     svg: true,
-    session: true, // ✅ ajoute ceci
+    session: true, 
   },
   output: 'server',
   adapter: netlify(),

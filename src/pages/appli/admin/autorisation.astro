@@ -18,6 +18,57 @@ if (!locals.pb.authStore.isSuperuser) {
 if (Astro.request.method === "POST") {
     const form = await Astro.request.formData();
 
+    // 📧 EMAIL IMPORT
+    const newEmailsRaw = form.get("emails");
+    if (typeof newEmailsRaw === "string" && newEmailsRaw.trim() !== "") {
+        try {
+            const newEmails = newEmailsRaw
+                .split(/[\s,;]+/)
+                .map((e) => e.trim().toLowerCase())
+                .filter(Boolean);
+
+            for (const email of newEmails) {
+                try {
+                    // vérifier si l'email existe déjà
+                    try {
+                        await locals.pb
+                            .collection("users")
+                            .getFirstListItem(`email = '${email}'`);
+                        console.log("Utilisateur déjà existant :", email);
+                        continue;
+                    } catch {
+                        // utilisateur non trouvé, on peut le créer
+                    }
+
+                    const password = "temperature";
+
+                    const [nomBrut] = email.split("@");
+                    const [prenom, nom] = nomBrut.split(".");
+                    const nomComplet = `${prenom?.charAt(0).toUpperCase() + prenom?.slice(1)} ${nom?.toUpperCase()}`;
+
+                    await locals.pb.collection("users").create({
+                        email,
+                        password,
+                        passwordConfirm: password,
+                        emailVisibility: true,
+                        nom: nomComplet || "Importé",
+                    });
+                } catch (err) {
+                    console.error(
+                        "Erreur création utilisateur :",
+                        email,
+                        err?.response?.data || err,
+                    );
+                }
+            }
+
+            message = "✅ Importation terminée.";
+        } catch (err) {
+            message = "❌ Erreur pendant l'import.";
+            console.error("Erreur bloc try principal :", err);
+        }
+    }
+
     // 📄 PDF UPLOAD
     if (form.has("upload_pdf")) {
         try {
@@ -55,40 +106,6 @@ if (Astro.request.method === "POST") {
         } catch (err) {
             console.error("❌ Erreur PDF :", err);
             message = "❌ Erreur lors de l'indexation du PDF.";
-        }
-    }
-
-    // 📧 EMAIL IMPORT
-    else if (form.has("emails")) {
-        try {
-            const newEmailsRaw = form.get("emails");
-            const newEmails = newEmailsRaw
-                .split(/[,\\s;]+/)
-                .map((e) => e.trim().toLowerCase())
-                .filter(Boolean);
-
-            for (const email of newEmails) {
-                try {
-                    const password = crypto.randomUUID();
-                    const [nomBrut] = email.split("@");
-                    const [prenom, nom] = nomBrut.split(".");
-                    const nomComplet = `${prenom?.charAt(0).toUpperCase() + prenom?.slice(1)} ${nom?.toUpperCase()}`;
-
-                    await locals.pb.collection("users").create({
-                        email,
-                        password,
-                        passwordConfirm: password,
-                        nom: nomComplet || "Importé",
-                    });
-                } catch (err) {
-                    console.error("Erreur création utilisateur :", email, err);
-                }
-            }
-
-            message = "✅ Importation terminée.";
-        } catch (e) {
-            message = "❌ Erreur pendant l'import.";
-            console.error(e);
         }
     }
 }

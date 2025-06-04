@@ -1,5 +1,6 @@
 ---
 // src/pages/appli/register.astro (première connexion simplifiée sans e-mail)
+// src/pages/appli/register.astro
 import Layout from "../../layouts/Layoutappli.astro";
 export const prerender = false;
 
@@ -11,18 +12,24 @@ let email = "";
 if (Astro.request.method === "POST") {
     const form = await Astro.request.formData();
     const mode = form.get("step");
-    email = form.get("email") as string;
+    email = form.get("email")?.toLowerCase().trim() ?? "";
 
     if (mode === "start") {
         try {
-            const user = await locals.pb
-                .collection("users")
-                .getFirstListItem(`email="${email}"`);
+            const list = await locals.pb.collection("users").getList(1, 1, {
+                filter: `email = '${email}'`,
+            });
+            const user = list.items[0];
+
             if (user) {
                 step = "setpass";
+            } else {
+                message = "Aucun compte trouvé pour cet e-mail.";
             }
         } catch (err) {
-            message = "Aucun compte trouvé pour cet e-mail.";
+            message =
+                "Une erreur est survenue lors de la recherche de l'e-mail.";
+            console.error(err);
         }
     }
 
@@ -35,18 +42,28 @@ if (Astro.request.method === "POST") {
             step = "setpass";
         } else {
             try {
-                const user = await locals.pb
+                // Authentification avec le mot de passe temporaire
+                await locals.pb
                     .collection("users")
-                    .getFirstListItem(`email="${email}"`);
-                await locals.pb.collection("users").update(user.id, {
-                    password,
-                    passwordConfirm: password,
-                });
+                    .authWithPassword(email, "temperature");
+
+                // Mise à jour du mot de passe
+                await locals.pb
+                    .collection("users")
+                    .update(locals.pb.authStore.model.id, {
+                        oldPassword: "temperature",
+                        password,
+                        passwordConfirm: password,
+                    });
+
+                // Déconnexion après mise à jour
+                locals.pb.authStore.clear();
+
                 message =
                     "Mot de passe enregistré avec succès. Vous pouvez maintenant vous connecter.";
                 step = "done";
             } catch (err) {
-                message = "Une erreur est survenue.";
+                message = "Erreur lors de la mise à jour du mot de passe.";
                 step = "setpass";
                 console.error(err);
             }
